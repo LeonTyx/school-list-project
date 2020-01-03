@@ -18,9 +18,9 @@ func Routes() *chi.Mux {
 	return router
 }
 
-type GradeList struct{
+type GradeList struct {
 	GradeList []SupplyListDetails `json:"grade_list"`
-	School string `json:"school"`
+	School    string              `json:"school"`
 }
 
 type SupplyListDetails struct {
@@ -61,7 +61,7 @@ type SupplyList struct {
 	Grade           int8             `json:"grade"`
 }
 
-func isNumeric(s string) bool {
+func IsNumeric(s string) bool {
 	_, err := strconv.ParseFloat(s, 64)
 	return err == nil
 }
@@ -70,9 +70,9 @@ func GetASupplyList(w http.ResponseWriter, r *http.Request) {
 	listID := chi.URLParam(r, "listID")
 
 	var grade int8
-	grade= -1
+	grade = -1
 
-	if isNumeric(listID) && len(listID) < 5 {
+	if IsNumeric(listID) && len(listID) < 5 {
 		rows, err := database.DBCon.Query("SELECT S.grade, P.supply_id, P.supply_name, P.supply_desc, B.optional FROM supply_item P JOIN supply_list_bridge B ON P.supply_id = B.supply_id JOIN supply_list S ON S.list_id = B.list_id WHERE B.list_id=$1 ORDER BY grade ASC", listID)
 
 		if err != nil {
@@ -96,10 +96,10 @@ func GetASupplyList(w http.ResponseWriter, r *http.Request) {
 			Grade:           grade,
 		}
 
-		render.JSON(w,r, supplyList)
+		render.JSON(w, r, supplyList)
 	} else {
 		render.Status(r, 414)
-		render.JSON(w,r, nil)
+		render.JSON(w, r, nil)
 	}
 
 }

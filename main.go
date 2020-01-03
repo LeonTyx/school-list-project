@@ -22,11 +22,6 @@ import (
 	"school-list-project/school-list"
 )
 
-var (
-	googleOauthConfig *oauth2.Config
-	store             *pgstore.PGStore
-)
-
 func Routes() *chi.Mux {
 	router := chi.NewRouter()
 	router.Use(
@@ -60,24 +55,24 @@ func initEnv() {
 func initOauthStore() {
 	var err error
 
-	store, err = pgstore.NewPGStore(os.Getenv("DATABASE_URL"), []byte(os.Getenv("DATABASE_SECRET")))
+	database.SessionStore, err = pgstore.NewPGStore(os.Getenv("DATABASE_URL"), []byte(os.Getenv("DATABASE_SECRET")))
 	if err != nil {
 		panic(err)
 	}
 
-	store.MaxAge(1800)
+	database.SessionStore.MaxAge(1800)
 	if os.Getenv("ENV") == "DEV" {
-		googleOauthConfig = &oauth2.Config{
-			RedirectURL:  "http://localhost:8080/callback",
+		database.GoogleOauthConfig = &oauth2.Config{
+			RedirectURL:  "http://localhost:8080/v1/api/oauth/callback",
 			ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
 			ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
 			Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"},
 			Endpoint:     google.Endpoint,
 		}
 
-		store.Options.Secure = false
+		database.SessionStore.Options.Secure = false
 	} else {
-		googleOauthConfig = &oauth2.Config{
+		database.GoogleOauthConfig = &oauth2.Config{
 			RedirectURL:  "https://safe-brook-30495.herokuapp.com/callback",
 			ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
 			ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
@@ -85,10 +80,10 @@ func initOauthStore() {
 			Endpoint:     google.Endpoint,
 		}
 
-		store.Options.Secure = true
-		store.Options.Domain = "safe-brook-30495.herokuapp.com"
+		database.SessionStore.Options.Secure = true
+		database.SessionStore.Options.Domain = "safe-brook-30495.herokuapp.com"
 	}
-	fmt.Println("Successful oauth store connection!", store)
+	fmt.Println("Successful oauth store connection!", database.SessionStore)
 }
 
 func initDB() {
@@ -120,7 +115,7 @@ func main() {
 	initDB()
 
 	defer database.DBCon.Close()
-	defer store.Close()
+	defer database.SessionStore.Close()
 
 	router := Routes()
 
