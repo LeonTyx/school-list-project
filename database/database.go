@@ -26,7 +26,7 @@ func InitOauthStore() {
 	SessionStore.MaxAge(1800)
 	if os.Getenv("ENV") == "DEV" {
 		GoogleOauthConfig = &oauth2.Config{
-			RedirectURL:  "http://localhost:8080/v1/api/oauth/callback",
+			RedirectURL:  "http://localhost:8080/oauth/v1/callback",
 			ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
 			ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
 			Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"},

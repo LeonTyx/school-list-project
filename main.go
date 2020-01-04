@@ -27,10 +27,13 @@ func Routes() *chi.Mux {
 		middleware.Recoverer,       // Recover from panics without crashing server
 	)
 
-	router.Route("/v1", func(r chi.Router) {
-		r.Mount("/api/schools", school_list.Routes())
-		r.Mount("/api/supply_lists", supply_list.Routes())
-		r.Mount("/api/oauth", oauth.Routes())
+	router.Route("/api/v1", func(r chi.Router) {
+		r.Mount("/schools", school_list.Routes())
+		r.Mount("/supply_lists", supply_list.Routes())
+	})
+
+	router.Route("/oauth/v1", func(r chi.Router) {
+		r.Mount("/", oauth.Routes())
 	})
 
 	return router

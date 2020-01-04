@@ -66,6 +66,7 @@ func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userData, err := GetUserInfo(r.FormValue("state"), r.FormValue("code"), r)
+	fmt.Println(userData)
 	if err != nil {
 		fmt.Println("Error getting content: " + err.Error())
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
@@ -185,11 +186,10 @@ func GetUserInfo(state string, code string, r *http.Request) (User, error) {
 		log.Println(err)
 	}
 
-	userData = User{
-		ExpiresIn:    token.Expiry,
-		AccessToken:  token.AccessToken,
-		RefreshToken: token.RefreshToken,
-	}
+	fmt.Println(userData.Email)
+	userData.ExpiresIn = token.Expiry
+	userData.AccessToken = token.AccessToken
+	userData.RefreshToken = token.RefreshToken
 
 	return userData, nil
 }
