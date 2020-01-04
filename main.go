@@ -7,9 +7,11 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"path/filepath"
 	"school-list-project/database"
 	"school-list-project/oauth"
 	supply_list "school-list-project/supply-list"
+	"strings"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
@@ -36,8 +38,13 @@ func Routes() *chi.Mux {
 		r.Mount("/", oauth.Routes())
 	})
 
+	workDir, _ := os.Getwd()
+	frontendDir := filepath.Join(workDir, "frontend/build")
+	FileServer(router, "/", http.Dir(frontendDir))
+
 	return router
 }
+
 
 func InitEnv() {
 	if _, err := os.Stat("environment.env"); err == nil {
@@ -57,6 +64,24 @@ func GetPort() string {
 		fmt.Println("INFO: No PORT environment variable detected, defaulting to " + port)
 	}
 	return ":" + port
+}
+
+func FileServer(r chi.Router, path string, root http.FileSystem) {
+	if strings.ContainsAny(path, "{}*") {
+		panic("FileServer does not permit URL parameters.")
+	}
+
+	fs := http.StripPrefix(path, http.FileServer(root))
+
+	if path != "/" && path[len(path)-1] != '/' {
+		r.Get(path, http.RedirectHandler(path+"/", 301).ServeHTTP)
+		path += "/"
+	}
+	path += "*"
+
+	r.Get(path, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		fs.ServeHTTP(w, r)
+	}))
 }
 
 func main() {

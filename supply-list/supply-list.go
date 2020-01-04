@@ -33,20 +33,29 @@ type SupplyListDetails struct {
 func GetSupplyLists(w http.ResponseWriter, r *http.Request) {
 	schoolID := chi.URLParam(r, "schoolID")
 
-	var supplyLists []SupplyListDetails
-	supplyList := SupplyListDetails{
-		ListID:       0,
-		Grade:        0,
-		StartingYear: 0,
-		EndingYear:   0,
-	}
-	supplyLists = append(supplyLists, supplyList)
-	gradeList := GradeList{
-		GradeList: supplyLists,
-		School:    schoolID,
-	}
+	if IsNumeric(schoolID) && len(schoolID) < 5 {
+		rows, err := database.DBCon.Query("SELECT list_id, grade, starting_year, ending_year FROM supply_list P INNER JOIN school S ON S.school_id = P.school_id WHERE P.school_id=$1 ORDER BY grade", schoolID)
 
-	render.JSON(w, r, gradeList) // A chi router helper for serializing and returning json
+		if err != nil {
+			log.Fatal(err)
+		}
+		defer rows.Close()
+
+		var supplyLists []SupplyListDetails
+		for rows.Next() {
+			var sl SupplyListDetails
+			err := rows.Scan(&sl.ListID, &sl.Grade, &sl.StartingYear, &sl.EndingYear)
+			if err != nil {
+				log.Fatal(err)
+			}
+
+			supplyLists = append(supplyLists, sl)
+		}
+		render.JSON(w,r, supplyLists)
+	} else {
+		render.Status(r, 400)
+		render.JSON(w, r, nil)
+	}
 }
 
 type SupplyListItem struct {
@@ -73,7 +82,7 @@ func GetASupplyList(w http.ResponseWriter, r *http.Request) {
 	grade = -1
 
 	if IsNumeric(listID) && len(listID) < 5 {
-		rows, err := database.DBCon.Query("SELECT S.grade, P.supply_id, P.supply_name, P.supply_desc, B.optional FROM supply_item P JOIN supply_list_bridge B ON P.supply_id = B.supply_id JOIN supply_list S ON S.list_id = B.list_id WHERE B.list_id=$1 ORDER BY grade ASC", listID)
+		rows, err := database.DBCon.Query("SELECT S.grade, P.supply_id, P.supply_name, P.supply_desc, B.optional FROM supply_item P JOIN supply_list_bridge B ON P.supply_id = B.supply_id JOIN supply_list S ON S.list_id = B.list_id WHERE B.list_id=$1 ORDER BY grade", listID)
 
 		if err != nil {
 			log.Fatal(err)

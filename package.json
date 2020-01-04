@@ -1,0 +1,16 @@
+{
+  "name": "frontend",
+  "engines": {
+    "node": "8.11.3"
+  },
+  "scripts": {
+    "start": "cd frontend && npm install --only=dev && npm install && npm start",
+    "build": "cd frontend && npm install --only=dev && npm install && npm run build",
+    "test": "cd frontend && npm install --only=dev && npm install && npm run test",
+    "eject": "cd frontend && npm install --only=dev && npm install && npm run eject"
+  },
+  "dependencies": {
+    "node-sass": "^4.13.0",
+    "react-router-dom": "^5.1.2"
+  }
+}
