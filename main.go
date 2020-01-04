@@ -1,13 +1,9 @@
 package main
 
 import (
-	"database/sql"
 	"fmt"
-	"github.com/antonlindstrom/pgstore"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
 	"log"
 	"net/http"
 	"os"
@@ -27,7 +23,6 @@ func Routes() *chi.Mux {
 	router.Use(
 		render.SetContentType(render.ContentTypeJSON), // Set content-Type headers as application/json
 		middleware.Logger,          // Log API request calls
-		middleware.DefaultCompress, // Compress results, mostly gzipping assets and json
 		middleware.RedirectSlashes, // Redirect slashes to no slash URL versions
 		middleware.Recoverer,       // Recover from panics without crashing server
 	)
@@ -41,62 +36,14 @@ func Routes() *chi.Mux {
 	return router
 }
 
-func initEnv() {
+func InitEnv() {
 	if _, err := os.Stat("environment.env"); err == nil {
 		err := godotenv.Load("environment.env")
 		if err != nil {
-			fmt.Println("Error loading .env file")
+			fmt.Println("Error loading environment.env")
 		}
-		fmt.Println("ENV:", os.Getenv("ENV"))
+		fmt.Println("Current environment:", os.Getenv("ENV"))
 	}
-	fmt.Println("ENV:", os.Getenv("ENV"))
-}
-
-func initOauthStore() {
-	var err error
-
-	database.SessionStore, err = pgstore.NewPGStore(os.Getenv("DATABASE_URL"), []byte(os.Getenv("DATABASE_SECRET")))
-	if err != nil {
-		panic(err)
-	}
-
-	database.SessionStore.MaxAge(1800)
-	if os.Getenv("ENV") == "DEV" {
-		database.GoogleOauthConfig = &oauth2.Config{
-			RedirectURL:  "http://localhost:8080/v1/api/oauth/callback",
-			ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
-			ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
-			Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"},
-			Endpoint:     google.Endpoint,
-		}
-
-		database.SessionStore.Options.Secure = false
-	} else {
-		database.GoogleOauthConfig = &oauth2.Config{
-			RedirectURL:  "https://safe-brook-30495.herokuapp.com/callback",
-			ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
-			ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
-			Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"},
-			Endpoint:     google.Endpoint,
-		}
-
-		database.SessionStore.Options.Secure = true
-		database.SessionStore.Options.Domain = "safe-brook-30495.herokuapp.com"
-	}
-	fmt.Println("Successful oauth store connection!", database.SessionStore)
-}
-
-func initDB() {
-	var err error
-
-	// Open up our database connection.
-	database.DBCon, err = sql.Open("postgres", os.Getenv("DATABASE_URL"))
-	// if there is an error opening the connection, handle it
-	if err != nil {
-		fmt.Println("Cannot open SQL connection")
-		panic(err.Error())
-	}
-	fmt.Println("Successful database connection ", database.DBCon)
 }
 
 func GetPort() string {
@@ -110,9 +57,9 @@ func GetPort() string {
 }
 
 func main() {
-	initEnv()
-	initOauthStore()
-	initDB()
+	InitEnv()
+	database.InitOauthStore()
+	database.InitDB()
 
 	defer database.DBCon.Close()
 	defer database.SessionStore.Close()
@@ -127,6 +74,5 @@ func main() {
 		log.Panicf("Logging err: %s\n", err.Error()) // panic if there is an error
 	}
 
-	log.Fatal(http.ListenAndServe(GetPort(), router)) // Note, the port is usually gotten from the environment.
-
+	log.Fatal(http.ListenAndServe(GetPort(), router))
 }
