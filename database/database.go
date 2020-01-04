@@ -36,7 +36,7 @@ func InitOauthStore() {
 		SessionStore.Options.Secure = false
 	} else {
 		GoogleOauthConfig = &oauth2.Config{
-			RedirectURL:  "https://safe-brook-30495.herokuapp.com/callback",
+			RedirectURL:  "https://"+os.Getenv("DOMAIN")+"oauth/v1/callback",
 			ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
 			ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
 			Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"},
@@ -44,7 +44,7 @@ func InitOauthStore() {
 		}
 
 		SessionStore.Options.Secure = true
-		SessionStore.Options.Domain = "safe-brook-30495.herokuapp.com"
+		SessionStore.Options.Domain = os.Getenv("DOMAIN")
 	}
 	fmt.Println("Successful oauth store connection!")
 }

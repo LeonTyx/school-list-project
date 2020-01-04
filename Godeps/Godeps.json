@@ -1,0 +1,91 @@
+{
+	"ImportPath": "school-list-project",
+	"GoVersion": "go1.12",
+	"GodepVersion": "v80",
+	"Deps": [
+		{
+			"ImportPath": "cloud.google.com/go/compute/metadata",
+			"Comment": "logging/v1.0.0-30-g768132bb",
+			"Rev": "768132bba1e7dd4ec0934d4a93eec2705030780a"
+		},
+		{
+			"ImportPath": "github.com/antonlindstrom/pgstore",
+			"Comment": "1.0.0",
+			"Rev": "a407030ba6d0efd9a1aad3d0cfc18a9b13d2f2e7"
+		},
+		{
+			"ImportPath": "github.com/go-chi/chi",
+			"Comment": "v4.0.2-24-g7fb3452",
+			"Rev": "7fb34524d9ab7c9e3dd0f9c17c1ec808d8c77f33"
+		},
+		{
+			"ImportPath": "github.com/go-chi/chi/middleware",
+			"Comment": "v4.0.2-24-g7fb3452",
+			"Rev": "7fb34524d9ab7c9e3dd0f9c17c1ec808d8c77f33"
+		},
+		{
+			"ImportPath": "github.com/go-chi/render",
+			"Comment": "v1.0.1",
+			"Rev": "3215478343fbc559bd3fc08f7031bb134d6bdad5"
+		},
+		{
+			"ImportPath": "github.com/gorilla/securecookie",
+			"Comment": "v1.1.1-11-g8645062",
+			"Rev": "86450627d8e6b88e00ea41f228489b89d08a40de"
+		},
+		{
+			"ImportPath": "github.com/gorilla/sessions",
+			"Comment": "v1.2.0-3-g36821f6",
+			"Rev": "36821f6da8fc2cb2d2b5c7a6ad481792be667489"
+		},
+		{
+			"ImportPath": "github.com/joho/godotenv",
+			"Comment": "v1.3.0-10-g5c0e6c6",
+			"Rev": "5c0e6c6ab1a0a9ef0a8822cba3a05d62f7dad941"
+		},
+		{
+			"ImportPath": "github.com/lib/pq",
+			"Comment": "v1.2.0-12-g931b5ae",
+			"Rev": "931b5ae4c24e6810c8c82ab4734904de3df1c3dc"
+		},
+		{
+			"ImportPath": "github.com/lib/pq/oid",
+			"Comment": "v1.2.0-12-g931b5ae",
+			"Rev": "931b5ae4c24e6810c8c82ab4734904de3df1c3dc"
+		},
+		{
+			"ImportPath": "github.com/lib/pq/scram",
+			"Comment": "v1.2.0-12-g931b5ae",
+			"Rev": "931b5ae4c24e6810c8c82ab4734904de3df1c3dc"
+		},
+		{
+			"ImportPath": "github.com/pkg/errors",
+			"Comment": "v0.8.1-24-g27936f6",
+			"Rev": "27936f6d90f9c8e1145f11ed52ffffbfdb9e0af7"
+		},
+		{
+			"ImportPath": "golang.org/x/net/context/ctxhttp",
+			"Rev": "c95aed5357e77a4bf7d3955c46740000a17adee1"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2",
+			"Rev": "0f29369cfe4552d0e4bcddc57cc75f4d7e672a33"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2/google",
+			"Rev": "0f29369cfe4552d0e4bcddc57cc75f4d7e672a33"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2/internal",
+			"Rev": "0f29369cfe4552d0e4bcddc57cc75f4d7e672a33"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2/jws",
+			"Rev": "0f29369cfe4552d0e4bcddc57cc75f4d7e672a33"
+		},
+		{
+			"ImportPath": "golang.org/x/oauth2/jwt",
+			"Rev": "0f29369cfe4552d0e4bcddc57cc75f4d7e672a33"
+		}
+	]
+}
