@@ -50,7 +50,7 @@ class App extends React.Component {
 
                 //If there has been more than 25 minutes since login, refresh session
                 if ((currentDate.getTime() - lastLogin.getTime()) / 1000 > 1500) {
-                    fetch("./refresh")
+                    fetch("./oauth/v1/refresh")
                         .then(respone => {
                             console.log("Session refreshed");
                             localStorage.setItem("lastRefresh",new Date());
@@ -75,7 +75,7 @@ class App extends React.Component {
     checkSession=()=>{
         console.log("attempting get user data");
         if(this.cookieExists("session")){
-            fetch('./profile')
+            fetch('./oauth/v1/profile')
                 .then(response => response.json())
                 .then(data => {
                     localStorage.setItem('name', data.Name);
@@ -115,7 +115,7 @@ class App extends React.Component {
 
     logout=()=>{
         console.log("Logging out");
-        fetch('./logout')
+        fetch('./oauth/v1/logout')
             .then(response =>{
                 console.log(response);
                 localStorage.removeItem('name');

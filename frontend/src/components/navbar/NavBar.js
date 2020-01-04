@@ -8,7 +8,7 @@ function NavBar(props){
             {props.isLoggedIn ? (
                 <div>Hello, {props.name}!. <button onClick={props.logout}>Logout here</button></div>
             ):(
-                <div><a href={"./login"} onClick={props.setLoginTime}>Editor Login</a></div>
+                <div><a href={"./oauth/v1/login"} onClick={props.setLoginTime}>Editor Login</a></div>
             )}
         </header>
     )
