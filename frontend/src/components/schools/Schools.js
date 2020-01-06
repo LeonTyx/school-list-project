@@ -11,9 +11,7 @@ function Schools(){
             const response = await fetch("./api/v1/schools");
             const json = await response.json();
             setSchools(json);
-            if(json.schools === null && json.district === ""){
 
-            }
             setLoading(false)
         }
 
@@ -22,7 +20,7 @@ function Schools(){
     //todo: add "no schools" in case of empty school list
     return(
         !loading ?(
-            json.schools === null && json.district === "" ? (
+            schools.schools !== null && schools.district !== "" ? (
                 <div className="schools">
                     <img src={LandingHero} alt="Child ready for first day of school"/>
                     <h2>Schools in {schools.district}</h2>

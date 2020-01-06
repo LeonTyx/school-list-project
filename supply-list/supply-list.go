@@ -18,9 +18,11 @@ func Routes() *chi.Mux {
 	return router
 }
 
-type GradeList struct {
-	GradeList []SupplyListDetails `json:"grade_list"`
-	School    string              `json:"school"`
+//A GradeList is a list of all supply lists
+//Belonging to a school
+type GradeList struct{
+	SchoolName string `json:"school_name"`
+	SupplyLists []SupplyListDetails `json:"supply_lists"`
 }
 
 type SupplyListDetails struct {
@@ -51,13 +53,33 @@ func GetSupplyLists(w http.ResponseWriter, r *http.Request) {
 
 			supplyLists = append(supplyLists, sl)
 		}
-		render.JSON(w,r, supplyLists)
+		gradeList := GradeList{
+			SchoolName:      GetSchoolName(schoolID),
+			SupplyLists: supplyLists,
+		}
+		render.JSON(w,r, gradeList)
 	} else {
 		render.Status(r, 400)
 		render.JSON(w, r, nil)
 	}
 }
+func GetSchoolName(schoolID string) string{
+	rows, err := database.DBCon.Query("SELECT name FROM school S WHERE S.school_id=$1", schoolID)
 
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	var schoolName string
+	for rows.Next() {
+		err := rows.Scan(&schoolName)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	return schoolName
+}
 type SupplyListItem struct {
 	SupplyID string `json:"list_id"`
 	Name     string `json:"name"`
