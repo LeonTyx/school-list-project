@@ -22,6 +22,7 @@ func Routes() *chi.Mux {
 //Belonging to a school
 type GradeList struct{
 	SchoolName string `json:"school_name"`
+	EducationStage string `json:"education_stage"`
 	SupplyLists []SupplyListDetails `json:"supply_lists"`
 }
 
@@ -53,8 +54,10 @@ func GetSupplyLists(w http.ResponseWriter, r *http.Request) {
 
 			supplyLists = append(supplyLists, sl)
 		}
+		schoolDetails := GetSchoolName(schoolID)
 		gradeList := GradeList{
-			SchoolName:      GetSchoolName(schoolID),
+			SchoolName: schoolDetails[0],
+			EducationStage: schoolDetails[1],
 			SupplyLists: supplyLists,
 		}
 		render.JSON(w,r, gradeList)
@@ -63,8 +66,8 @@ func GetSupplyLists(w http.ResponseWriter, r *http.Request) {
 		render.JSON(w, r, nil)
 	}
 }
-func GetSchoolName(schoolID string) string{
-	rows, err := database.DBCon.Query("SELECT name FROM school S WHERE S.school_id=$1", schoolID)
+func GetSchoolName(schoolID string) []string {
+	rows, err := database.DBCon.Query("SELECT name, education_stage FROM school S WHERE S.school_id=$1", schoolID)
 
 	if err != nil {
 		log.Fatal(err)
@@ -72,13 +75,19 @@ func GetSchoolName(schoolID string) string{
 	defer rows.Close()
 
 	var schoolName string
+	var educationStage string
+
 	for rows.Next() {
-		err := rows.Scan(&schoolName)
+		err := rows.Scan(&schoolName, &educationStage)
 		if err != nil {
 			log.Fatal(err)
 		}
 	}
-	return schoolName
+	schoolDetails := make([]string, 2)
+	schoolDetails[0] = schoolName
+	schoolDetails[1] = educationStage
+
+	return schoolDetails
 }
 type SupplyListItem struct {
 	SupplyID string `json:"list_id"`

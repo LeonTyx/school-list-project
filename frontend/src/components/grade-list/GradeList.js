@@ -22,38 +22,40 @@ function GradeList(props){
 
     },[]);
 
-    return(
-        !loading ?(
-            gradeList !== null ? (
-                <div className="supply-lists">
+    return !loading ? (
+        gradeList !== null ? (
+            <div className="school">
+                <div className="grade-list-header">
                     <h2>
-                        {gradeList.school_name !== null ?
-                            (gradeList.school_name)
-                            :
-                            ("This school has no name")
-                        }
+                        {gradeList.school_name !== null
+                            ? gradeList.school_name
+                            : "This school has no name"}
                     </h2>
-                    <h3>Select the Supply List you're looking for</h3>
-                    <ul>
-                        {gradeList.supply_lists !== null ?
-                            (gradeList.supply_lists.map(list => (
-                                    <li key={list.list_id}>
-                                        <a href={".#/list/"+list.list_id}>List for grade {list.grade}</a>
-                                    </li>
-                                ))
-                            ):(
-                                <div>It doesn't look like this school has any supply lists!</div>
-                            )
-                        }
-                    </ul>
+                    <div className="education-stage">{gradeList.education_stage}</div>
                 </div>
-            ):(
-                <div>Doesn't look like this school exists</div>
-            )
-        ):(
-            <div>Loading</div>
-        )
+                <ul className="grade-list">
+                    {gradeList.supply_lists !== null ? (
+                        gradeList.supply_lists.map(list => (
+                            <li key={list.list_id}>
+                                <a href={".#/list/" + list.list_id}>
+                                    List for grade {list.grade}
+                                </a>
 
-    )
+                                <div className="school-year">
+                                    {list.starting_year} to {list.ending_year}
+                                </div>
+                            </li>
+                        ))
+                    ) : (
+                        <div>It doesn't look like this school has any supply lists!</div>
+                    )}
+                </ul>
+            </div>
+        ) : (
+            <div>Doesn't look like this school exists</div>
+        )
+    ) : (
+        <div>Loading</div>
+    );
 }
 export default GradeList;
