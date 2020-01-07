@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import CardinalToOrdinary from "../cardinal-to-ordinary/CardinalToOrdinary";
 import './supply-list.scss'
 import SupplyItem from "./supply-item";
 
@@ -72,7 +73,7 @@ function SupplyList(props){
         supplyList !== null ? (
             <div className="supply-list">
                 <div className="title">
-                    <h2>List for grade {supplyList.grade}</h2>
+                    <h2>{CardinalToOrdinary(supplyList.grade)}</h2>
                     <div className="completed-items">
                         {requiredItemsCompleted} of {requiredSupplies.length} items found
                     </div>
