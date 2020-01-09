@@ -7,3 +7,5 @@ environment.env
 /frontend/node_modules
 /frontend/build/
 /node_modules/
+
+*.mod

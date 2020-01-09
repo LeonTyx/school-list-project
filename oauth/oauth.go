@@ -8,13 +8,39 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"golang.org/x/oauth2"
+	"golang.org/x/oauth2/google"
 	"io/ioutil"
 	"log"
 	"math/rand"
 	"net/http"
+	"os"
 	"school-list-project/database"
 	"time"
 )
+
+var (
+	GoogleOauthConfig *oauth2.Config
+)
+
+func ConfigOauth() {
+	if os.Getenv("ENV") == "DEV" {
+		GoogleOauthConfig = &oauth2.Config{
+			RedirectURL:  "http://localhost:8080/oauth/v1/callback",
+			ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+			ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+			Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"},
+			Endpoint:     google.Endpoint,
+		}
+	} else {
+		GoogleOauthConfig = &oauth2.Config{
+			RedirectURL:  "https://" + os.Getenv("HOST") + "/oauth/v1/callback",
+			ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
+			ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
+			Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"},
+			Endpoint:     google.Endpoint,
+		}
+	}
+}
 
 type Error struct {
 	StatusCode   int    `json:"status_code"`
@@ -52,7 +78,7 @@ func HandleGoogleLogin(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	url := database.GoogleOauthConfig.AuthCodeURL(stateString, oauth2.AccessTypeOffline)
+	url := GoogleOauthConfig.AuthCodeURL(stateString, oauth2.AccessTypeOffline)
 	http.Redirect(w, r, url, http.StatusTemporaryRedirect)
 }
 
@@ -164,7 +190,7 @@ func GetUserInfo(state string, code string, r *http.Request) (User, error) {
 		return userData, fmt.Errorf("invalid oauth state")
 	}
 
-	token, err := database.GoogleOauthConfig.Exchange(context.Background(), code)
+	token, err := GoogleOauthConfig.Exchange(context.Background(), code)
 	if err != nil {
 		return userData, fmt.Errorf("code exchange failed: %s", err.Error())
 	}

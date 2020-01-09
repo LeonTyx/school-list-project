@@ -4,15 +4,12 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/antonlindstrom/pgstore"
-	"golang.org/x/oauth2"
-	"golang.org/x/oauth2/google"
 	"os"
 )
 
 var (
-	DBCon             *sql.DB
-	SessionStore      *pgstore.PGStore
-	GoogleOauthConfig *oauth2.Config
+	DBCon        *sql.DB
+	SessionStore *pgstore.PGStore
 )
 
 func InitOauthStore() {
@@ -26,24 +23,8 @@ func InitOauthStore() {
 
 	SessionStore.MaxAge(1800)
 	if os.Getenv("ENV") == "DEV" {
-		GoogleOauthConfig = &oauth2.Config{
-			RedirectURL:  "http://localhost:8080/oauth/v1/callback",
-			ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
-			ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
-			Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"},
-			Endpoint:     google.Endpoint,
-		}
-
 		SessionStore.Options.Secure = false
 	} else {
-		GoogleOauthConfig = &oauth2.Config{
-			RedirectURL:  "https://"+os.Getenv("HOST")+"/oauth/v1/callback",
-			ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
-			ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
-			Scopes:       []string{"https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile"},
-			Endpoint:     google.Endpoint,
-		}
-
 		SessionStore.Options.Secure = true
 		SessionStore.Options.Domain = os.Getenv("DOMAIN")
 	}

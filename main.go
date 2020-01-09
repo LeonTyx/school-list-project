@@ -22,7 +22,7 @@ import (
 
 func ForceSsl(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		if os.Getenv("GO_ENV") == "production" {
+		if os.Getenv("ENV") == "production" {
 			if r.Header.Get("x-forwarded-proto") != "https" {
 				sslUrl := "https://" + r.Host + r.RequestURI
 				http.Redirect(w, r, sslUrl, http.StatusTemporaryRedirect)
@@ -59,7 +59,6 @@ func Routes() *chi.Mux {
 
 	return router
 }
-
 
 func InitEnv() {
 	if _, err := os.Stat("environment.env"); err == nil {
@@ -101,6 +100,8 @@ func FileServer(r chi.Router, path string, root http.FileSystem) {
 
 func main() {
 	InitEnv()
+	oauth.ConfigOauth()
+
 	database.InitOauthStore()
 	database.InitDB()
 
