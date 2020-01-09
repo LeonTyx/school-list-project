@@ -16,6 +16,7 @@ var (
 )
 
 func InitOauthStore() {
+	//Todo break this up into two functions
 	var err error
 
 	SessionStore, err = pgstore.NewPGStore(os.Getenv("DATABASE_URL"), []byte(os.Getenv("DATABASE_SECRET")))

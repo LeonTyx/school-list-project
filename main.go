@@ -20,6 +20,20 @@ import (
 	"school-list-project/school-list"
 )
 
+func ForceSsl(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		if os.Getenv("GO_ENV") == "production" {
+			if r.Header.Get("x-forwarded-proto") != "https" {
+				sslUrl := "https://" + r.Host + r.RequestURI
+				http.Redirect(w, r, sslUrl, http.StatusTemporaryRedirect)
+				return
+			}
+		}
+
+		next.ServeHTTP(w, r)
+	})
+
+}
 func Routes() *chi.Mux {
 	router := chi.NewRouter()
 	router.Use(
@@ -27,6 +41,7 @@ func Routes() *chi.Mux {
 		middleware.Logger,          // Log API request calls
 		middleware.RedirectSlashes, // Redirect slashes to no slash URL versions
 		middleware.Recoverer,       // Recover from panics without crashing server
+		ForceSsl,
 	)
 
 	router.Route("/api/v1", func(r chi.Router) {

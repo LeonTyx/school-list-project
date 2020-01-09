@@ -1,3 +1,6 @@
+/**
+ * @return {string}
+ */
 function CardinalToOrdinary(grade) {
     const Ordinary = [
         "Kindergarten",

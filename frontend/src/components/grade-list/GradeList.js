@@ -47,7 +47,7 @@ function GradeList(props){
                             </li>
                         ))
                     ) : (
-                        <div>It doesn't look like this school has any supply lists!</div>
+                        <li>It doesn't look like this school has any supply lists!</li>
                     )}
                 </ul>
             </div>
