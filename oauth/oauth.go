@@ -15,6 +15,7 @@ import (
 	"net/http"
 	"os"
 	"school-list-project/database"
+	"strconv"
 	"time"
 )
 
@@ -68,7 +69,7 @@ func HandleGoogleLogin(w http.ResponseWriter, r *http.Request) {
 	state, err := database.SessionStore.Get(r, "state")
 	PanicOnErr(err)
 
-	stateString := string(GetSeed())
+	stateString := strconv.FormatInt(GetSeed(),10)
 	state.Values["state"] = stateString
 
 	err = state.Save(r, w)
