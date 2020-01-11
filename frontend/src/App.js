@@ -22,7 +22,7 @@ class App extends React.Component {
         console.log("Component mounted");
 
         //Every 30 seconds, check if session needs to be refresh
-        setInterval(this.refreshSession, 60000);
+        setInterval(this.refreshSession, 30000);
 
         if(this.cookieExists("session")){
             console.log("Cookie exists: Session");
@@ -43,13 +43,15 @@ class App extends React.Component {
 
     refreshSession=()=>{
         if(this.cookieExists("session")) {
-            if(localStorage.getItem("isRefreshing") === "false"){
-                localStorage.setItem("isRefreshing", true);
+            if(localStorage.getItem("isRefreshing") === "false" ||
+                localStorage.getItem("isRefreshing") === null){
                 const lastLogin = new Date(localStorage.getItem("lastRefresh"));
                 const currentDate = new Date();
 
                 //If there has been more than 25 minutes since login, refresh session
                 if ((currentDate.getTime() - lastLogin.getTime()) / 1000 > 1500) {
+                    localStorage.setItem("isRefreshing", true);
+
                     fetch("./oauth/v1/refresh")
                         .then(respone => {
                             console.log("Session refreshed");
@@ -73,7 +75,7 @@ class App extends React.Component {
     };
 
     checkSession=()=>{
-        console.log("attempting get user data");
+        console.log("attempting to get user data");
         if(this.cookieExists("session")){
             fetch('./oauth/v1/profile')
                 .then(response=> {
