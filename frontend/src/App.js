@@ -6,7 +6,7 @@ import Schools from "./components/schools/Schools";
 import {HashRouter as Router, Switch, Route} from 'react-router-dom'
 import GradeList from "./components/grade-list/GradeList";
 import SupplyList from "./components/supply-list/SupplyList";
-
+//Todo: rewrite entire frontend session logic. This terrifies me.
 class App extends React.Component {
     constructor(props) {
         super(props);
@@ -76,13 +76,24 @@ class App extends React.Component {
         console.log("attempting get user data");
         if(this.cookieExists("session")){
             fetch('./oauth/v1/profile')
-                .then(response => response.json())
-                .then(data => {
-                    localStorage.setItem('name', data.Name);
-                    localStorage.setItem('email', data.Email);
+                .then(response=> {
+                    if(response.status===414){
+                        localStorage.removeItem('name');
+                        localStorage.removeItem('email');
+                        this.setState({
+                            name: null,
+                            email: null,
+                            isLoggedIn:false
+                        })
+                    }
+                    return response.json();
+                })
+                .then(profile => {
+                    localStorage.setItem('name', profile.name);
+                    localStorage.setItem('email', profile.email);
                     this.setState({
-                        name: data.Name,
-                        email: data.Email,
+                        name: profile.name,
+                        email: profile.email,
                         isLoggedIn:true
                     })
                 });
@@ -108,16 +119,16 @@ class App extends React.Component {
             //There is a user logged in
             this.setState({ name: name, email: email, isLoggedIn:true })
         }else{
-            console.log("Email and name in localstorage have become decoupled. Attempting to contact server about current user session");
+            console.log("User information in localstorage have become decoupled. Attempting to contact server about current user session");
             checkSession()
         }
+        //todo: Use switch instead of this boolean nightmare
     };
 
     logout=()=>{
         console.log("Logging out");
         fetch('./oauth/v1/logout')
             .then(response =>{
-                console.log(response);
                 localStorage.removeItem('name');
                 localStorage.removeItem('email');
                 this.setState({

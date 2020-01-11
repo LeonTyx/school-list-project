@@ -69,7 +69,7 @@ func HandleGoogleLogin(w http.ResponseWriter, r *http.Request) {
 	state, err := database.SessionStore.Get(r, "state")
 	PanicOnErr(err)
 
-	stateString := strconv.FormatInt(GetSeed(),10)
+	stateString := strconv.FormatInt(GetSeed(), 10)
 	state.Values["state"] = stateString
 
 	err = state.Save(r, w)
@@ -120,6 +120,7 @@ func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 	session.Values["GoogleId"] = userData.GoogleId
 	session.Values["Email"] = userData.Email
 	session.Values["Name"] = userData.Name
+	session.Values["Picture"] = userData.Picture
 
 	err = session.Save(r, w)
 	if err != nil {
@@ -173,6 +174,7 @@ func ReplaceAccessToken(userData User) {
 type User struct {
 	Email        string    `json:"email"`
 	Name         string    `json:"name"`
+	Picture      string    `json:"picture"`
 	GoogleId     string    `json:"id"`
 	ExpiresIn    time.Time `json:"expires_in"`
 	AccessToken  string
@@ -251,8 +253,9 @@ func HandleGoogleLogout(w http.ResponseWriter, r *http.Request) {
 }
 
 type Profile struct {
-	Email string
-	Name  string
+	Email string	`json:"email"`
+	Name  string `json:"name"`
+	Picture string `json:"picture"`
 }
 
 func GetProfile(w http.ResponseWriter, r *http.Request) {
@@ -269,12 +272,14 @@ func GetProfile(w http.ResponseWriter, r *http.Request) {
 		EmailStr := fmt.Sprintf("%v", Email)
 		Name := session.Values["Name"]
 		NameStr := fmt.Sprintf("%v", Name)
+		PictureUrl := session.Values["Picture"]
+		PictureUrlStr := fmt.Sprintf("%v", PictureUrl)
 
-		userData := Profile{EmailStr, NameStr}
+		userData := Profile{EmailStr, NameStr, PictureUrlStr}
 
 		render.JSON(w, r, userData)
 	} else {
-		_, _ = w.Write([]byte("no session found"))
+		RespondWithError(w, r, 401, "Session not found. Session may be expired or non-existent")
 	}
 }
 

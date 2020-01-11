@@ -20,10 +20,10 @@ func Routes() *chi.Mux {
 
 //A GradeList is a list of all supply lists
 //Belonging to a school
-type GradeList struct{
-	SchoolName string `json:"school_name"`
-	EducationStage string `json:"education_stage"`
-	SupplyLists []SupplyListDetails `json:"supply_lists"`
+type GradeList struct {
+	SchoolName     string              `json:"school_name"`
+	EducationStage string              `json:"education_stage"`
+	SupplyLists    []SupplyListDetails `json:"supply_lists"`
 }
 
 type SupplyListDetails struct {
@@ -56,11 +56,11 @@ func GetSupplyLists(w http.ResponseWriter, r *http.Request) {
 		}
 		schoolDetails := GetSchoolName(schoolID)
 		gradeList := GradeList{
-			SchoolName: schoolDetails[0],
+			SchoolName:     schoolDetails[0],
 			EducationStage: schoolDetails[1],
-			SupplyLists: supplyLists,
+			SupplyLists:    supplyLists,
 		}
-		render.JSON(w,r, gradeList)
+		render.JSON(w, r, gradeList)
 	} else {
 		render.Status(r, 400)
 		render.JSON(w, r, nil)
@@ -89,6 +89,7 @@ func GetSchoolName(schoolID string) []string {
 
 	return schoolDetails
 }
+
 type SupplyListItem struct {
 	SupplyID string `json:"list_id"`
 	Name     string `json:"name"`
