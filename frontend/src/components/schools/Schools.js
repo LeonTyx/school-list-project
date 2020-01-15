@@ -17,7 +17,7 @@ function Schools(){
 
         fetchUrl();
     }, []);
-    //todo: add "no schools" in case of empty school list
+
     return(
         !loading ?(
             schools.schools !== null && schools.district !== "" ? (

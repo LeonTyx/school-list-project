@@ -2,6 +2,9 @@ package main
 
 import (
 	"fmt"
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/render"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"log"
@@ -10,14 +13,10 @@ import (
 	"path/filepath"
 	"school-list-project/database"
 	"school-list-project/oauth"
-	supply_list "school-list-project/supply-list"
-	"strings"
-
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
-	"github.com/go-chi/render"
 	_ "school-list-project/oauth"
 	"school-list-project/school-list"
+	supply_list "school-list-project/supply-list"
+	"strings"
 )
 
 func ForceSsl(next http.Handler) http.Handler {
@@ -55,6 +54,7 @@ func Routes() *chi.Mux {
 
 	workDir, _ := os.Getwd()
 	frontendDir := filepath.Join(workDir, "frontend/build")
+
 	FileServer(router, "/", http.Dir(frontendDir))
 
 	return router
@@ -77,6 +77,7 @@ func GetPort() string {
 		port = "4747"
 		fmt.Println("INFO: No PORT environment variable detected, defaulting to " + port)
 	}
+	fmt.Println("Running on port:", port)
 	return ":" + port
 }
 

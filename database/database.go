@@ -13,7 +13,6 @@ var (
 )
 
 func InitOauthStore() {
-	//Todo break this up into two functions
 	var err error
 
 	SessionStore, err = pgstore.NewPGStore(os.Getenv("DATABASE_URL"), []byte(os.Getenv("DATABASE_SECRET")))
@@ -22,6 +21,7 @@ func InitOauthStore() {
 	}
 
 	SessionStore.MaxAge(1800)
+	SessionStore.Options.HttpOnly = true
 	if os.Getenv("ENV") == "DEV" {
 		SessionStore.Options.Secure = false
 	} else {
