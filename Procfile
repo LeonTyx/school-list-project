@@ -1,2 +1,2 @@
-web: go run school-list-project
+web: school-list-project
 build: npm run build
