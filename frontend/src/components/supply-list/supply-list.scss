@@ -60,18 +60,76 @@
     li{
       padding:0;
       margin: 0;
-      input{
-        display:inline-block;
-      }
-      h3{
-        margin: 0 0 0 .2em;
-        display:inline-block;
-        font-size:1.1em;
-        color:$secondary-text-color;
-      }
-      p{
-        margin:0 0 .25em;
-        color:$secondary-text-color;
+      /* The container */
+      .supply-item {
+        position: relative;
+        padding-left: 35px;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+
+        /* Hide the browser's default checkbox */
+        input {
+          position: absolute;
+          opacity: 0;
+          cursor: pointer;
+          height: 0;
+          width: 0;
+
+          /* Show the checkmark when checked */
+          &:checked ~ .checkmark:after {
+            display: block;
+          }
+        }
+
+        /* Create a custom checkbox */
+        .checkmark {
+          position: absolute;
+          top: 0;
+          left: 0;
+          height: 25px;
+          width: 25px;
+          background-color: #eee;
+
+          /* Create the checkmark/indicator (hidden when not checked) */
+          &:after {
+            content: "";
+            position: absolute;
+            display: none;
+            left: 9px;
+            top: 5px;
+            width: 5px;
+            height: 10px;
+            border: solid white;
+            border-width: 0 3px 3px 0;
+            -webkit-transform: rotate(45deg);
+            -ms-transform: rotate(45deg);
+            transform: rotate(45deg);
+          }
+        }
+
+        /* On mouse-over, add a grey background color */
+        &:hover input ~ .checkmark {
+          background-color: #ccc;
+        }
+
+        /* When the checkbox is checked, add a blue background */
+        input:checked ~ .checkmark {
+          background-color: #2196F3;
+        }
+
+        h3{
+          margin: 0 0 0 .2em;
+          display:inline-block;
+          font-size:1.1em;
+          color:$secondary-text-color;
+        }
+        p{
+          margin:0 0 .25em;
+          color:$secondary-text-color;
+        }
       }
     }
   }

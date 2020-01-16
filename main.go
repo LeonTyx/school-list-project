@@ -11,11 +11,11 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"school-list-project/api/school-list"
+	supply_list "school-list-project/api/supply-list"
 	"school-list-project/database"
 	"school-list-project/oauth"
 	_ "school-list-project/oauth"
-	"school-list-project/school-list"
-	supply_list "school-list-project/supply-list"
 	"strings"
 )
 
