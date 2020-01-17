@@ -59,7 +59,8 @@
     padding:0 1em;
     li{
       padding:0;
-      margin: 0;
+      margin: 0 0 .5em;
+
       /* The container */
       .supply-item {
         position: relative;
@@ -69,6 +70,9 @@
         -moz-user-select: none;
         -ms-user-select: none;
         user-select: none;
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
 
         /* Hide the browser's default checkbox */
         input {
@@ -128,7 +132,7 @@
           width: calc(100% - 3em);
         }
         p{
-          margin:0 0 .25em;
+          margin:0;
           color:$secondary-text-color;
         }
       }
