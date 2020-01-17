@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import CardinalToOrdinary from "../cardinal-to-ordinary/CardinalToOrdinary";
 import './supply-list.scss'
 import SupplyItem from "./supply-item";
+import Loader from "../loader/Loader";
 
 function SupplyList(props){
     const [loading, setLoading] = useState(true);
@@ -115,7 +116,7 @@ function SupplyList(props){
             !loading ? (
                 <div>Looks like you found an empty supply list</div>
             ):(
-                <div className={"loading-text"}>Loading...</div>
+                <Loader/>
             )
         )
 //todo Rewrite to have loading, empty list, and nonexistent list

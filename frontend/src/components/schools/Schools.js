@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import './schools.scss'
 import LandingHero from '../../assets/back-to-school.png'
+import Loader from "../loader/Loader";
 
 function Schools(){
     const [schools , setSchools] = useState([null]);
@@ -38,7 +39,7 @@ function Schools(){
             )
 
         ):(
-            <div>Loading...</div>
+            <Loader/>
         )
     )
 }

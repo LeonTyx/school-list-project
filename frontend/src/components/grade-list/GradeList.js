@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './grade-list.scss'
+import Loader from "../loader/Loader";
 
 function GradeList(props){
     const [gradeList , setGradeList] = useState([]);
@@ -55,7 +56,7 @@ function GradeList(props){
             <div>Doesn't look like this school exists</div>
         )
     ) : (
-        <div>Loading</div>
+        <Loader/>
     );
 }
 export default GradeList;
