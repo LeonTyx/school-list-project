@@ -125,6 +125,7 @@
           display:inline-block;
           font-size:1.1em;
           color:$secondary-text-color;
+          width: calc(100% - 3em);
         }
         p{
           margin:0 0 .25em;
