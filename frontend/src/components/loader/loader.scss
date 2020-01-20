@@ -1,13 +1,25 @@
 .spinner{
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+}
+
+.inner-container{
   -webkit-animation: spin 2s infinite linear;
   -moz-animation: spin 2s infinite linear;
   -o-animation: spin 2s infinite linear;
   -ms-animation: spin 2s infinite linear;
   animation: spin 2s infinite linear;
-  display: flex;
-  flex-flow: row wrap;
-  align-items: center;
-  justify-content: center;
+
+  max-width:10em;
+  max-height:10em;
+  display:block;
+}
+
+img{
+  height:100%;
+  width:100%;
 }
 
 @-webkit-keyframes spin {

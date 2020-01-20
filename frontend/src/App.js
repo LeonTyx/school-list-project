@@ -1,11 +1,12 @@
 import React from 'react';
 import './app.scss'
 
-import NavBar from "./components/navbar/NavBar";
+import Header from "./components/header/Header";
 import Schools from "./components/schools/Schools";
 import {HashRouter as Router, Switch, Route} from 'react-router-dom'
 import GradeList from "./components/grade-list/GradeList";
 import SupplyList from "./components/supply-list/SupplyList";
+import NavBar from "./components/navbar/NavBar";
 //Todo: rewrite entire frontend session logic. This terrifies me.
 class App extends React.Component {
     constructor(props) {
@@ -169,7 +170,7 @@ class App extends React.Component {
     render() {
         return (
             <Router>
-                <NavBar isLoggedIn={this.state.isLoggedIn} name={this.state.name} logout={this.logout} setLoginTime={this.setLoginTime}/>
+                <Header isLoggedIn={this.state.isLoggedIn} name={this.state.name} logout={this.logout} setLoginTime={this.setLoginTime}/>
                 <main>
                     <Switch>
                         <Route exact path="/" component={Schools}/>
@@ -179,6 +180,8 @@ class App extends React.Component {
 
                     </Switch>
                 </main>
+
+                <NavBar/>
             </Router>
         );
     }

@@ -1,16 +1,35 @@
-import React from 'react'
-import './nav.scss'
+import React, { useState, useEffect } from 'react';
+import {NavLink} from 'react-router-dom'
+import './navbar.scss'
 
-function NavBar(props){
+function NavBar(){
+    const [schools , setSchools] = useState([null]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        async function fetchUrl() {
+            const response = await fetch("./api/v1/schools");
+            const json = await response.json();
+            setSchools(json);
+
+            setLoading(false)
+        }
+
+        fetchUrl();
+    }, []);
+
     return(
-        <header>
-            <a href="./#" className="logo">Back to School Simplified</a>
-            {props.isLoggedIn ? (
-                <div>Hello, {props.name}!. <button onClick={props.logout} className="logout-button">Logout here</button></div>
-            ):(
-                <div><a href={"./oauth/v1/login"} onClick={props.setLoginTime}>Editor Login</a></div>
-            )}
-        </header>
+        !loading &&(
+            schools.schools !== null && schools.district !== "" && (
+                <nav id="navigation">
+                    {schools.schools.map(school => (
+                        <NavLink key={school.school_id} exact activeClassName="active" to={"/lists/"+school.school_id}>
+                            {school.name}
+                        </NavLink>
+                    ))}
+                </nav>
+            )
+        )
     )
 }
 export default NavBar;

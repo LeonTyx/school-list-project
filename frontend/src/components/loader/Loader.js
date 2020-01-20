@@ -5,7 +5,9 @@ import LoadingIcon from "../../assets/loader.svg"
 function Loader(){
     return(
         <div className="spinner">
-            <img src={LoadingIcon} alt=""/>
+            <div className="inner-container">
+                <img src={LoadingIcon} alt=""/>
+            </div>
         </div>
     )
 }

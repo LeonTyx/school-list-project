@@ -8,6 +8,8 @@ function GradeList(props){
 
 
     useEffect(() => {
+        setLoading(true);
+
         async function fetchUrl() {
             const schoolID = props.match.params.id;
             //Todo: Check that listID is an integer before parsing it
@@ -21,7 +23,7 @@ function GradeList(props){
 
         fetchUrl();
 
-    },[]);
+    },[props.match.params.id]);
 
     return !loading ? (
         gradeList !== null ? (
