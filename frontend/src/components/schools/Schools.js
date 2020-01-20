@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './schools.scss'
-import LandingHero from '../../assets/back-to-school.png'
+import LandingHero from '../../assets/back-to-school.svg'
 import Loader from "../loader/Loader";
 
 function Schools(){
