@@ -12,7 +12,7 @@ import (
 func Routes() *chi.Mux {
 	router := chi.NewRouter()
 
-	router.Get("/supplies/{districtID}", GetSupplies)
+	router.Get("/{districtID}", GetSupplies)
 
 	return router
 }
@@ -20,7 +20,7 @@ func Routes() *chi.Mux {
 type Supplies struct {
 	DistrictID   string   `json:"district_id"`
 	DistrictName string   `json:"district_name"`
-	Supplies     []Supply `json:"supply_lists"`
+	Supplies     []Supply `json:"supplies"`
 }
 
 type Supply struct {
@@ -32,8 +32,8 @@ type Supply struct {
 func GetSupplies(w http.ResponseWriter, r *http.Request) {
 	districtID := chi.URLParam(r, "districtID")
 
-	if IsNumeric(districtID) && len(districtID) < 5 {
-		rows, err := database.DBCon.Query("SELECT supply_id, supply_name, supply_name FROM supply_item WHERE district_id=$1", districtID)
+	if IsNumeric(districtID) && len(districtID) == 7 {
+		rows, err := database.DBCon.Query("SELECT supply_id, supply_name, supply_desc, name FROM supply_item LEFT OUTER JOIN district d on supply_item.district_id = d.nces_id WHERE d.nces_id=$1", districtID)
 
 		if err != nil {
 			log.Fatal(err)
@@ -41,9 +41,10 @@ func GetSupplies(w http.ResponseWriter, r *http.Request) {
 		defer rows.Close()
 
 		var supplyListItems []Supply
+		var districtName string
 		for rows.Next() {
-			var supply Supply
-			err := rows.Scan(&supply.ID, &supply.Name, &supply.Desc)
+			var supply Supply //Possible bottleneck. Creates new struct for each row.
+			err := rows.Scan(&supply.ID, &supply.Name, &supply.Desc, &districtName)
 
 			if err != nil {
 				log.Fatal(err)
@@ -53,8 +54,8 @@ func GetSupplies(w http.ResponseWriter, r *http.Request) {
 		}
 		supplyList := Supplies{
 			DistrictID:   districtID,
-			DistrictName: "",
-			Supplies:     nil,
+			DistrictName: districtName,
+			Supplies:     supplyListItems,
 		}
 
 		render.JSON(w, r, supplyList)
