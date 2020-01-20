@@ -12,6 +12,7 @@ import (
 	"os"
 	"path/filepath"
 	"school-list-project/api/school-list"
+	"school-list-project/api/supplies"
 	supply_list "school-list-project/api/supply-list"
 	"school-list-project/database"
 	"school-list-project/oauth"
@@ -46,6 +47,7 @@ func Routes() *chi.Mux {
 	router.Route("/api/v1", func(r chi.Router) {
 		r.Mount("/schools", school_list.Routes())
 		r.Mount("/supply_lists", supply_list.Routes())
+		r.Mount("/supplies", supplies.Routes())
 	})
 
 	router.Route("/oauth/v1", func(r chi.Router) {

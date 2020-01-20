@@ -139,8 +139,20 @@ func GetASupplyList(w http.ResponseWriter, r *http.Request) {
 
 		render.JSON(w, r, supplyList)
 	} else {
-		render.Status(r, 414)
-		render.JSON(w, r, nil)
+		RespondWithError(w, r, 414, "List IDs must not exceed 5 characters in length")
 	}
 
 }
+type Error struct {
+	StatusCode   int    `json:"status_code"`
+	ErrorMessage string `json:"error_msg"`
+}
+
+func RespondWithError(w http.ResponseWriter, r *http.Request, status_code int, error_msg string) {
+	render.Status(r, status_code)
+	render.JSON(w, r, Error{
+		StatusCode:   status_code,
+		ErrorMessage: error_msg,
+	})
+}
+
