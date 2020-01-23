@@ -14,9 +14,9 @@ import (
 	"school-list-project/api/school-list"
 	"school-list-project/api/supplies"
 	supply_list "school-list-project/api/supply-list"
+	"school-list-project/auth/oauth"
+	_ "school-list-project/auth/oauth"
 	"school-list-project/database"
-	"school-list-project/oauth"
-	_ "school-list-project/oauth"
 	"strings"
 )
 
@@ -32,8 +32,8 @@ func ForceSsl(next http.Handler) http.Handler {
 
 		next.ServeHTTP(w, r)
 	})
-
 }
+
 func Routes() *chi.Mux {
 	router := chi.NewRouter()
 	router.Use(

@@ -5,6 +5,7 @@ import (
 	"github.com/go-chi/render"
 	"log"
 	"net/http"
+	"school-list-project/auth/authorization"
 	"school-list-project/database"
 	"strconv"
 )
@@ -12,10 +13,24 @@ import (
 func Routes() *chi.Mux {
 	router := chi.NewRouter()
 
-	router.Get("/{districtID}", GetSupplies)
+	finalHandler := http.HandlerFunc(GetSupplies)
+
+	router.With(authorization.ValidSession).Get("/{districtID}",finalHandler)
+	router.Get("/supply/{supplyID}", GetSupply)
+	//router.Delete("/{todoID}", DeleteSupply)
+	//router.Post("/", CreateSupply)
+
 
 	return router
 }
+
+func GetSupply(w http.ResponseWriter, r *http.Request) {
+
+}
+
+//func CreateSupply(w http.ResponseWriter, r *http.Request) {}
+
+//func DeleteSupply(w http.ResponseWriter, r *http.Request) {}
 
 type Supplies struct {
 	DistrictID   string   `json:"district_id"`

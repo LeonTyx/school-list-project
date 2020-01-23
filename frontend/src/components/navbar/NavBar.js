@@ -23,7 +23,7 @@ function NavBar(){
             schools.schools !== null && schools.district !== "" && (
                 <nav id="navigation">
                     {schools.schools.map(school => (
-                        <NavLink key={school.school_id} exact activeClassName="active" to={"/lists/"+school.school_id}>
+                        <NavLink key={school.school_id}  activeClassName="active" to={"/lists/"+school.school_id}>
                             {school.name}
                         </NavLink>
                     ))}
