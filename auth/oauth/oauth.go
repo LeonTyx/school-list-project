@@ -93,7 +93,6 @@ func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 	}
 
 	userData, err := GetUserInfo(r.FormValue("state"), r.FormValue("code"), r)
-	fmt.Println(userData)
 	if err != nil {
 		fmt.Println("Error getting content: " + err.Error())
 		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
@@ -128,8 +127,7 @@ func HandleGoogleCallback(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	//Redirect user back to app
-	fmt.Println(session, userData)
+
 	http.Redirect(w, r, "/", http.StatusPermanentRedirect)
 }
 func CreateUser(userData User) {
@@ -163,8 +161,6 @@ func CheckCount(rows *sql.Rows) (count int) {
 }
 
 func ReplaceAccessToken(userData User) {
-	fmt.Println("Replacing access token for ", userData.Email)
-
 	_, err := database.DBCon.Query("UPDATE account SET access_token=$1, refresh_token=$2, expires_in=$3 WHERE email = $4", userData.AccessToken, userData.RefreshToken, userData.ExpiresIn, userData.Email)
 	if err != nil {
 		fmt.Println("Unable to update access token")
@@ -215,7 +211,6 @@ func GetUserInfo(state string, code string, r *http.Request) (User, error) {
 		log.Println(err)
 	}
 
-	fmt.Println(userData.Email)
 	userData.ExpiresIn = token.Expiry
 	userData.AccessToken = token.AccessToken
 	userData.RefreshToken = token.RefreshToken
@@ -236,7 +231,6 @@ func HandleGoogleLogout(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Is session new? ", session.IsNew)
 
 	if session.ID != "" {
-		fmt.Println("session id: ", session.ID)
 		session.Options.MaxAge = -1
 
 		err = session.Save(r, w)
@@ -294,7 +288,6 @@ func RefreshSession(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Is session new? ", session.IsNew)
 
 	if session.ID != "" {
-		fmt.Println("session id: ", session.Values["GoogleId"])
 		session.Options.MaxAge = 3600
 
 		err = session.Save(r, w)

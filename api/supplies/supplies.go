@@ -1,6 +1,7 @@
 package supplies
 
 import (
+	"context"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"log"
@@ -12,16 +13,32 @@ import (
 
 func Routes() *chi.Mux {
 	router := chi.NewRouter()
+	router.Use(
+		suppliesCtx,
+		authorization.ValidSession,
+		authorization.ResourceCtx,
+	)
 
-	finalHandler := http.HandlerFunc(GetSupplies)
+	router.With(
+		authorization.CanView,
+		).Get("/{districtID}", GetSupplies)
 
-	router.With(authorization.ValidSession).Get("/{districtID}",finalHandler)
-	router.Get("/supply/{supplyID}", GetSupply)
+	router.With(
+		authorization.CanView,
+	).Get("/supply/{supplyID}", GetSupply)
 	//router.Delete("/{todoID}", DeleteSupply)
 	//router.Post("/", CreateSupply)
-
+	//router.Post("/", EditSupply)
 
 	return router
+}
+
+func suppliesCtx(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), "resource", "supplies")
+
+		next.ServeHTTP(w, r.WithContext(ctx))
+	})
 }
 
 func GetSupply(w http.ResponseWriter, r *http.Request) {
