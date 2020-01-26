@@ -3,10 +3,11 @@ import './app.scss'
 
 import Header from "./components/header/Header";
 import Schools from "./components/schools/Schools";
-import {HashRouter as Router, Switch, Route} from 'react-router-dom'
+import {HashRouter as Router, Route, Switch} from 'react-router-dom'
 import GradeList from "./components/grade-list/GradeList";
 import SupplyList from "./components/supply-list/SupplyList";
 import NavBar from "./components/navbar/NavBar";
+
 //Todo: rewrite entire frontend session logic. This terrifies me.
 class App extends React.Component {
     constructor(props) {
@@ -25,7 +26,7 @@ class App extends React.Component {
         //Every 30 seconds, check if session needs to be refresh
         setInterval(this.refreshSession, 30000);
 
-        if(this.cookieExists("session")){
+        if (this.cookieExists("session")) {
             console.log("Cookie exists: Session");
             this.localStorageUpdated();
         }
@@ -42,10 +43,10 @@ class App extends React.Component {
         }
     }
 
-    refreshSession=()=>{
-        if(this.cookieExists("session")) {
-            if(localStorage.getItem("isRefreshing") === "false" ||
-                localStorage.getItem("isRefreshing") === null){
+    refreshSession = () => {
+        if (this.cookieExists("session")) {
+            if (localStorage.getItem("isRefreshing") === "false" ||
+                localStorage.getItem("isRefreshing") === null) {
                 const lastLogin = new Date(localStorage.getItem("lastRefresh"));
                 const currentDate = new Date();
 
@@ -56,18 +57,18 @@ class App extends React.Component {
                     fetch("./oauth/v1/refresh")
                         .then(respone => {
                             console.log("Session refreshed");
-                            localStorage.setItem("lastRefresh",new Date());
+                            localStorage.setItem("lastRefresh", new Date());
                             localStorage.setItem("isRefreshing", false);
                         })
                 }
-            }else{
+            } else {
                 console.log("Cannot initiate session refresh. A session refresh was already started");
             }
-        }else{
+        } else {
             this.setState({
-                email:null,
+                email: null,
                 name: null,
-                isLoggedIn:false
+                isLoggedIn: false
             });
 
             localStorage.removeItem("name");
@@ -75,18 +76,18 @@ class App extends React.Component {
         }
     };
 
-    checkSession=()=>{
+    checkSession = () => {
         console.log("attempting to get user data");
-        if(this.cookieExists("session")){
+        if (this.cookieExists("session")) {
             fetch('./oauth/v1/profile')
-                .then(response=> {
-                    if(response.status===414){
+                .then(response => {
+                    if (response.status === 414) {
                         localStorage.removeItem('name');
                         localStorage.removeItem('email');
                         this.setState({
                             name: null,
                             email: null,
-                            isLoggedIn:false
+                            isLoggedIn: false
                         })
                     }
                     return response.json();
@@ -97,15 +98,15 @@ class App extends React.Component {
                     this.setState({
                         name: profile.name,
                         email: profile.email,
-                        isLoggedIn:true
+                        isLoggedIn: true
                     })
                 });
         }
     };
 
-    localStorageUpdated=()=>{
+    localStorageUpdated = () => {
         console.log("Local storage updated");
-        const checkSession=this.checkSession;
+        const checkSession = this.checkSession;
         //Get user data from local storage
         const name = localStorage.getItem('name');
         const email = localStorage.getItem('email');
@@ -114,48 +115,45 @@ class App extends React.Component {
         if (name === null && email === null) {
             console.log("User not logged in");
             //There is no user logged in
-            this.setState({ name: null, email: null, isLoggedIn:false })
-        }
-        else if  (name !== null && email !== null) {
+            this.setState({name: null, email: null, isLoggedIn: false})
+        } else if (name !== null && email !== null) {
             console.log("User logged in");
 
             //There is a user logged in
-            this.setState({ name: name, email: email, isLoggedIn:true })
-        }else{
+            this.setState({name: name, email: email, isLoggedIn: true})
+        } else {
             console.log("User information in localstorage have become decoupled. Attempting to contact server about current user session");
             checkSession()
         }
         //todo: Use switch instead of this boolean nightmare
     };
 
-    logout=()=>{
+    logout = () => {
         console.log("Logging out");
         fetch('./oauth/v1/logout')
-            .then(response =>{
+            .then(response => {
                 localStorage.removeItem('name');
                 localStorage.removeItem('email');
                 this.setState({
                     name: null,
                     email: null,
-                    isLoggedIn:false
+                    isLoggedIn: false
                 })
             })
     };
 
-    setLoginTime=()=>{
+    setLoginTime = () => {
         localStorage.setItem("lastRefresh", new Date())
     };
 
-    cookieExists=(name)=> {
+    cookieExists = (name) => {
         var dc = document.cookie;
         var prefix = name + "=";
         var begin = dc.indexOf("; " + prefix);
         if (begin === -1) {
             begin = dc.indexOf(prefix);
             if (begin !== 0) return null;
-        }
-        else
-        {
+        } else {
             begin += 2;
             var end = document.cookie.indexOf(";", begin);
             if (end === -1) {
@@ -170,7 +168,8 @@ class App extends React.Component {
     render() {
         return (
             <Router>
-                <Header isLoggedIn={this.state.isLoggedIn} name={this.state.name} logout={this.logout} setLoginTime={this.setLoginTime}/>
+                <Header isLoggedIn={this.state.isLoggedIn} name={this.state.name} logout={this.logout}
+                        setLoginTime={this.setLoginTime}/>
                 <main>
                     <Switch>
                         <Route exact path="/" component={Schools}/>
@@ -187,4 +186,5 @@ class App extends React.Component {
     }
 
 }
+
 export default App;

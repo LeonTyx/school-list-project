@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import './schools.scss'
 import LandingHero from '../../assets/back-to-school.svg'
 import Loader from "../loader/Loader";
 
-function Schools(){
-    const [schools , setSchools] = useState([null]);
+function Schools() {
+    const [schools, setSchools] = useState([null]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -19,8 +19,8 @@ function Schools(){
         fetchUrl();
     }, []);
 
-    return(
-        !loading ?(
+    return (
+        !loading ? (
             schools.schools !== null && schools.district !== "" ? (
                 <div className="schools">
                     <img src={LandingHero} alt="Child ready for first day of school"/>
@@ -29,18 +29,19 @@ function Schools(){
                     <ul>
                         {schools.schools.map(school => (
                             <li key={school.school_id}>
-                                <a href={".#/lists/"+school.school_id}>List for {school.name}</a>
+                                <a href={".#/lists/" + school.school_id}>List for {school.name}</a>
                             </li>
                         ))}
                     </ul>
                 </div>
-            ):(
+            ) : (
                 <div>Looks like this district doesn't have any schools</div>
             )
 
-        ):(
+        ) : (
             <Loader/>
         )
     )
 }
+
 export default Schools;

@@ -1,80 +1,81 @@
 @import "../../variables";
 
-.school{
+.school {
   max-width: 60em;
   width: calc(100% - 1em);
   margin: 1.5em auto;
   box-sizing: border-box;
-  background:#fff;
+  background: #fff;
   border-radius: .5em;
   overflow: hidden;
-  box-shadow: 0 14px 35px -24px rgba(46,46,46,0.25);
-  -webkit-box-shadow: 0 14px 35px -24px rgba(46,46,46,0.25);
-  -moz-box-shadow: 0 14px 35px -24px rgba(46,46,46,0.25);
+  box-shadow: 0 14px 35px -24px rgba(46, 46, 46, 0.25);
+  -webkit-box-shadow: 0 14px 35px -24px rgba(46, 46, 46, 0.25);
+  -moz-box-shadow: 0 14px 35px -24px rgba(46, 46, 46, 0.25);
 
-  .grade-list-header{
-    padding:.75em 1.2em;
+  .grade-list-header {
+    padding: .75em 1.2em;
     background: $header-background;
-    display:flex;
+    display: flex;
     flex-flow: row wrap;
     justify-content: space-between;
 
-    h2{
+    h2 {
       font-size: 1.3em;
-      margin:0;
-      color:$secondary-text-color;
+      margin: 0;
+      color: $secondary-text-color;
     }
 
-    .education-stage{
-      background:$light-blue-background;
+    .education-stage {
+      background: $light-blue-background;
       color: #0685f7;
-      padding:.2em 1em;
+      padding: .2em 1em;
       border-radius: 2em;
       font-weight: 500;
     }
   }
 
-  .grade-list{
+  .grade-list {
     width: 100%;
-    margin:0;
-    padding:0;
+    margin: 0;
+    padding: 0;
     list-style-type: none;
     text-indent: 0;
-    li{
+
+    li {
       padding: .5em .75em;
       background: #fff;
       border-radius: .5em;
-      display:flex;
+      display: flex;
       flex-flow: row wrap;
       justify-content: space-between;
       align-items: center;
       transition: background .2s ease-in-out;
 
-      a{
+      a {
         text-decoration: none;
         color: $secondary-text-color;
         display: block;
         padding: 1em .5em;
-        flex:1 auto;
+        flex: 1 auto;
 
-        &:visited{
+        &:visited {
           text-decoration: none;
           color: $secondary-text-color;
         }
       }
 
-      .school-year{
-        background:$light-blue-background;
+      .school-year {
+        background: $light-blue-background;
         color: $secondary-text-color;
-        padding:.2em 1em;
+        padding: .2em 1em;
         border-radius: 2em;
         font-weight: 500;
       }
 
-      &:hover{
+      &:hover {
         background: #edf4fc;
 
-        .school-year{
+        .school-year {
           background: #fff;
         }
       }

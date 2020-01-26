@@ -16,13 +16,13 @@ nav {
   white-space: nowrap;
 
   a {
-    margin:0 .2em;
+    margin: 0 .2em;
     display: inline-block;
     color: $secondary-text-color;
     font-size: 1.1em;
     font-weight: 600;
     text-decoration: none;
-    transition: 0.2s  all;
+    transition: 0.2s all;
 
     padding: .2em .75em;
     box-sizing: border-box;
@@ -32,7 +32,7 @@ nav {
       text-decoration: none;
     }
 
-    &.active{
+    &.active {
       background: $light-blue-background;
     }
   }

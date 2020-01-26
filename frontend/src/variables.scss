@@ -1,14 +1,14 @@
 $primary-text-color: #0685f7;
 $secondary-text-color: #47535e;
-$header-background:#f5f9fa;
+$header-background: #f5f9fa;
 
-$light-blue-background:#ddefff;
-$light-orange-background:#fff2dc;
-$light-purple-background:#e6def9;
-$light-green-background:#e8f2ed;
+$light-blue-background: #ddefff;
+$light-orange-background: #fff2dc;
+$light-purple-background: #e6def9;
+$light-green-background: #e8f2ed;
 
-$basic-box-shadow:0 10px 15px 0 rgba(46,62,72,.05);
-$large-box-shadow:0 4px 25px 0 rgba(46,62,72,.2);
+$basic-box-shadow: 0 10px 15px 0 rgba(46, 62, 72, .05);
+$large-box-shadow: 0 4px 25px 0 rgba(46, 62, 72, .2);
 
 //Basic slide up animation
 @-webkit-keyframes slide-up {
@@ -23,6 +23,7 @@ $large-box-shadow:0 4px 25px 0 rgba(46,62,72,.2);
     opacity: 1;
   }
 }
+
 @keyframes slide-up {
   0% {
     -webkit-transform: translateY(50px);
@@ -49,6 +50,7 @@ $large-box-shadow:0 4px 25px 0 rgba(46,62,72,.2);
     opacity: 1;
   }
 }
+
 @keyframes slide-right {
   0% {
     -webkit-transform: translateX(50px);

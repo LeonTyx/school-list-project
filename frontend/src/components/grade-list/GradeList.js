@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import './grade-list.scss'
 import Loader from "../loader/Loader";
 
-function GradeList(props){
-    const [gradeList , setGradeList] = useState([]);
+function GradeList(props) {
+    const [gradeList, setGradeList] = useState([]);
     const [loading, setLoading] = useState(true);
 
 
@@ -13,7 +13,7 @@ function GradeList(props){
         async function fetchUrl() {
             const schoolID = props.match.params.id;
             //Todo: Check that listID is an integer before parsing it
-            const response = await fetch("./api/v1/supply_lists/school/"+schoolID);
+            const response = await fetch("./api/v1/supply_lists/school/" + schoolID);
             const json = await response.json();
 
             setGradeList(json);
@@ -23,7 +23,7 @@ function GradeList(props){
 
         fetchUrl();
 
-    },[props.match.params.id]);
+    }, [props.match.params.id]);
 
     return !loading ? (
         gradeList !== null ? (
@@ -61,4 +61,5 @@ function GradeList(props){
         <Loader/>
     );
 }
+
 export default GradeList;

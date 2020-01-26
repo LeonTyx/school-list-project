@@ -1,66 +1,67 @@
 @import '../../variables.scss';
 
-.loading-text{
+.loading-text {
   text-align: center;
-  color:$secondary-text-color;
-  font-size:1.5em;
-  width:100%;
+  color: $secondary-text-color;
+  font-size: 1.5em;
+  width: 100%;
   font-weight: 500;
 }
 
-.supply-list{
+.supply-list {
   max-width: 50em;
-  margin:1em auto 0;
+  margin: 1em auto 0;
   box-sizing: border-box;
   background: #fff;
   border-radius: 1em;
   overflow: hidden;
-  width:calc(100% - 2em);
-  box-shadow: 0 14px 35px -24px rgba(46,46,46,0.25);
-  -webkit-box-shadow: 0 14px 35px -24px rgba(46,46,46,0.25);
-  -moz-box-shadow: 0 14px 35px -24px rgba(46,46,46,0.25);
+  width: calc(100% - 2em);
+  box-shadow: 0 14px 35px -24px rgba(46, 46, 46, 0.25);
+  -webkit-box-shadow: 0 14px 35px -24px rgba(46, 46, 46, 0.25);
+  -moz-box-shadow: 0 14px 35px -24px rgba(46, 46, 46, 0.25);
 
-  .title{
-    margin-bottom:1em;
-    display:flex;
+  .title {
+    margin-bottom: 1em;
+    display: flex;
     flex-flow: row wrap;
     align-items: center;
     justify-content: space-between;
     box-sizing: border-box;
     background: #f5f9fa;
 
-    .completed-items{
-      padding:.25em 1em;
-      margin:0 .5em;
-      background:$light-blue-background;
+    .completed-items {
+      padding: .25em 1em;
+      margin: 0 .5em;
+      background: $light-blue-background;
       border-radius: 1em;
-      color:$primary-text-color;
+      color: $primary-text-color;
       font-weight: 500;
     }
 
-    h2{
-      margin:.75em 0;
-      padding:0 .75em;
-      font-size:1.25em;
+    h2 {
+      margin: .75em 0;
+      padding: 0 .75em;
+      font-size: 1.25em;
 
-      color:$secondary-text-color;
+      color: $secondary-text-color;
     }
 
-    h4{
-      margin:.75em 0;
-      padding:0 .75em;
+    h4 {
+      margin: .75em 0;
+      padding: 0 .75em;
 
-      color:$secondary-text-color;
+      color: $secondary-text-color;
     }
   }
 
 
-  ul{
+  ul {
     list-style-type: none;
     text-align: left;
-    padding:0 1em;
-    li{
-      padding:0;
+    padding: 0 1em;
+
+    li {
+      padding: 0;
       margin: 0 0 .5em;
 
       /* The container */
@@ -126,23 +127,24 @@
           background-color: #2196F3;
         }
 
-        h3{
+        h3 {
           margin: 0 0 0 .2em;
-          display:inline-block;
-          font-size:1.1em;
-          color:$secondary-text-color;
+          display: inline-block;
+          font-size: 1.1em;
+          color: $secondary-text-color;
           width: calc(100% - 3em);
         }
-        p{
-          margin:0;
-          color:$secondary-text-color;
+
+        p {
+          margin: 0;
+          color: $secondary-text-color;
         }
       }
     }
   }
 
   //Animate each card with a slight delay for each proceeding card
-  &{
+  & {
     -webkit-animation: slide-up 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
     animation: slide-up 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
   }

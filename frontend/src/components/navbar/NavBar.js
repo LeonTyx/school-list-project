@@ -1,9 +1,9 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import {NavLink} from 'react-router-dom'
 import './navbar.scss'
 
-function NavBar(){
-    const [schools , setSchools] = useState([null]);
+function NavBar() {
+    const [schools, setSchools] = useState([null]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -18,12 +18,12 @@ function NavBar(){
         fetchUrl();
     }, []);
 
-    return(
-        !loading &&(
+    return (
+        !loading && (
             schools.schools !== null && schools.district !== "" && (
                 <nav id="navigation">
                     {schools.schools.map(school => (
-                        <NavLink key={school.school_id}  activeClassName="active" to={"/lists/"+school.school_id}>
+                        <NavLink key={school.school_id} activeClassName="active" to={"/lists/" + school.school_id}>
                             {school.name}
                         </NavLink>
                     ))}
@@ -32,4 +32,5 @@ function NavBar(){
         )
     )
 }
+
 export default NavBar;

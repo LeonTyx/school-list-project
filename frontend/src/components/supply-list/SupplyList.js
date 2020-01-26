@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, {useEffect, useState} from 'react';
 import CardinalToOrdinary from "../cardinal-to-ordinary/CardinalToOrdinary";
 import './supply-list.scss'
 import SupplyItem from "./supply-item";
 import Loader from "../loader/Loader";
 
-function SupplyList(props){
+function SupplyList(props) {
     const [loading, setLoading] = useState(true);
 
-    const [supplyList , setSupplyList] = useState(null);
+    const [supplyList, setSupplyList] = useState(null);
 
-    const [requiredItemsCompleted , setRequiredItemsCompleted] = useState(0);
-    const [optionalItemsCompleted , setOptionalItemsCompleted] = useState(0);
+    const [requiredItemsCompleted, setRequiredItemsCompleted] = useState(0);
+    const [optionalItemsCompleted, setOptionalItemsCompleted] = useState(0);
 
-    const [optionalSupplies , setOptionalSupplies] = useState(null);
-    const [requiredSupplies , setRequiredSupplies] = useState(null);
+    const [optionalSupplies, setOptionalSupplies] = useState(null);
+    const [requiredSupplies, setRequiredSupplies] = useState(null);
 
 
     function handleRequiredCompletion(event) {
@@ -44,14 +44,14 @@ function SupplyList(props){
         async function fetchUrl() {
             const listID = props.match.params.id;
             //Todo: Check that listID is an integer before parsing it
-            const response = await fetch("./api/v1/supply_lists/"+listID);
+            const response = await fetch("./api/v1/supply_lists/" + listID);
             const json = await response.json();
-            if(!Array.isArray(json.supply_list)){
+            if (!Array.isArray(json.supply_list)) {
                 setSupplyList(null);
                 setLoading(false)
-            }else{
+            } else {
                 let requiredList = [];
-                let optionalList =[];
+                let optionalList = [];
 
                 json.supply_list.map(supply => !supply.optional ?
                     (requiredList.push(supply))
@@ -68,9 +68,9 @@ function SupplyList(props){
         }
 
         fetchUrl();
-    },[props.match.params.id]);
+    }, [props.match.params.id]);
 
-    return(
+    return (
         supplyList !== null ? (
             <div className="supply-list">
                 <div className="title">
@@ -112,10 +112,10 @@ function SupplyList(props){
                     ))}
                 </ul>
             </div>
-        ):(
+        ) : (
             !loading ? (
                 <div>Looks like you found an empty supply list</div>
-            ):(
+            ) : (
                 <Loader/>
             )
         )
