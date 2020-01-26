@@ -6,9 +6,11 @@
   margin: 1.5em auto;
   box-sizing: border-box;
   background:#fff;
-  border: .1em solid #ddd;
   border-radius: .5em;
   overflow: hidden;
+  box-shadow: 0 14px 35px -24px rgba(46,46,46,0.25);
+  -webkit-box-shadow: 0 14px 35px -24px rgba(46,46,46,0.25);
+  -moz-box-shadow: 0 14px 35px -24px rgba(46,46,46,0.25);
 
   .grade-list-header{
     padding:.75em 1.2em;

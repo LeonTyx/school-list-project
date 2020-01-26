@@ -14,9 +14,11 @@
   box-sizing: border-box;
   background: #fff;
   border-radius: 1em;
-  border:.1em solid #ddd;
   overflow: hidden;
   width:calc(100% - 2em);
+  box-shadow: 0 14px 35px -24px rgba(46,46,46,0.25);
+  -webkit-box-shadow: 0 14px 35px -24px rgba(46,46,46,0.25);
+  -moz-box-shadow: 0 14px 35px -24px rgba(46,46,46,0.25);
 
   .title{
     margin-bottom:1em;

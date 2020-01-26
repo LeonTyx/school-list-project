@@ -2,7 +2,6 @@ package authorization
 
 import (
 	"context"
-	"fmt"
 	"github.com/go-chi/render"
 	"log"
 	"net/http"
@@ -29,12 +28,7 @@ func ValidSession(next http.Handler) http.Handler {
 			return
 		}
 
-		if session.ID != "" {
-			fmt.Println("Getting cookies for profile")
-			googleID := session.Values["GoogleId"]
-
-			fmt.Println(googleID)
-		} else {
+		if session.ID == "" {
 			RespondWithError(w, r, 401, "This user has no current session. Use of this endpoint is thus unauthorized")
 			return
 		}
