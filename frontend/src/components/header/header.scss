@@ -13,7 +13,7 @@ header{
         text-decoration: none;
         flex: 6 1;
 
-        &:visited{
+        &:visited, &:link, &:hover, &:active{
             text-decoration: none;
             color:$secondary-text-color;
         }
