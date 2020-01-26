@@ -91,7 +91,7 @@ func GetSchoolName(schoolID string) []string {
 }
 
 type SupplyListItem struct {
-	SupplyID string `json:"list_id"`
+	SupplyID string `json:"supply_id"`
 	Name     string `json:"name"`
 	Desc     string `json:"desc"`
 	Optional bool   `json:"optional"`

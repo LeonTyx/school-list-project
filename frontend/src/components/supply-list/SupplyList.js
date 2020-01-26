@@ -101,12 +101,12 @@ function SupplyList(props){
                 </div>
 
                 <ul className="optional">
-                    {optionalSupplies.map(item => (
+                    {optionalSupplies.map(supply => (
                         <SupplyItem
-                            key={item.supply_id}
-                            item={item.name}
-                            desc={item.desc}
-                            optional={item.optional}
+                            key={supply.supply_id}
+                            item={supply.name}
+                            desc={supply.desc}
+                            optional={supply.optional}
                             toggleCompletion={handleOptionalCompletion}
                         />
                     ))}
