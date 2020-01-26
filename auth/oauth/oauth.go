@@ -247,8 +247,8 @@ func HandleGoogleLogout(w http.ResponseWriter, r *http.Request) {
 }
 
 type Profile struct {
-	Email string	`json:"email"`
-	Name  string `json:"name"`
+	Email   string `json:"email"`
+	Name    string `json:"name"`
 	Picture string `json:"picture"`
 }
 

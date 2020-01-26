@@ -14,7 +14,7 @@ type Resource struct {
 }
 
 type Policy struct {
-	CanAdd bool
+	CanAdd    bool
 	CanView   bool
 	CanEdit   bool
 	CanDelete bool
@@ -56,7 +56,7 @@ func ResourceCtx(next http.Handler) http.Handler {
 		var resourcePolicy Resource
 		for rows.Next() {
 			err := rows.Scan(&resourcePolicy.Policy.CanAdd, &resourcePolicy.Policy.CanView,
-							 &resourcePolicy.Policy.CanEdit, &resourcePolicy.Policy.CanDelete)
+				&resourcePolicy.Policy.CanEdit, &resourcePolicy.Policy.CanDelete)
 			if err != nil {
 				RespondWithError(w, r, 500, "The server was unable to retrieve permission")
 				return

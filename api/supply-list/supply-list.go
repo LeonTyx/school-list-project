@@ -143,6 +143,7 @@ func GetASupplyList(w http.ResponseWriter, r *http.Request) {
 	}
 
 }
+
 type Error struct {
 	StatusCode   int    `json:"status_code"`
 	ErrorMessage string `json:"error_msg"`
@@ -155,4 +156,3 @@ func RespondWithError(w http.ResponseWriter, r *http.Request, status_code int, e
 		ErrorMessage: error_msg,
 	})
 }
-

@@ -21,7 +21,7 @@ func Routes() *chi.Mux {
 
 	router.With(
 		authorization.CanView,
-		).Get("/{districtID}", GetSupplies)
+	).Get("/{districtID}", GetSupplies)
 
 	router.With(
 		authorization.CanView,
