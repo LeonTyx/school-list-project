@@ -1,44 +1,16 @@
 import React, {useEffect, useState} from 'react';
 import CardinalToOrdinary from "../cardinal-to-ordinary/CardinalToOrdinary";
 import './supply-list.scss'
-import SupplyItem from "./supply-item";
 import Loader from "../loader/Loader";
+import ItemsFoundCounter from "./items-found-counter";
 
 function SupplyList(props) {
     const [loading, setLoading] = useState(true);
 
     const [supplyList, setSupplyList] = useState(null);
 
-    const [requiredItemsCompleted, setRequiredItemsCompleted] = useState(0);
-    const [optionalItemsCompleted, setOptionalItemsCompleted] = useState(0);
-
     const [optionalSupplies, setOptionalSupplies] = useState(null);
     const [requiredSupplies, setRequiredSupplies] = useState(null);
-
-
-    function handleRequiredCompletion(event) {
-        let checked = event.target.checked;
-        let completed = requiredItemsCompleted;
-
-        if (checked) {
-            completed++;
-        } else {
-            completed--;
-        }
-        setRequiredItemsCompleted(completed)
-    }
-
-    function handleOptionalCompletion(event) {
-        let checked = event.target.checked;
-        let completed = optionalItemsCompleted;
-
-        if (checked) {
-            completed++;
-        } else {
-            completed--;
-        }
-        setOptionalItemsCompleted(completed)
-    }
 
     useEffect(() => {
         async function fetchUrl() {
@@ -73,44 +45,8 @@ function SupplyList(props) {
     return (
         supplyList !== null ? (
             <div className="supply-list">
-                <div className="title">
-                    <h2>{CardinalToOrdinary(supplyList.grade)}</h2>
-                    <div className="completed-items">
-                        {requiredItemsCompleted} of {requiredSupplies.length} items found
-                    </div>
-                </div>
-
-                <ul>
-                    {requiredSupplies.map(item => (
-                        <SupplyItem
-                            key={item.supply_id}
-                            item={item.name}
-                            desc={item.desc}
-                            optional={item.optional}
-                            toggleCompletion={handleRequiredCompletion}
-                        />
-                    ))}
-                </ul>
-
-
-                <div className="title">
-                    <h4>Optional supplies</h4>
-                    <div className="completed-items">
-                        {optionalItemsCompleted} of {optionalSupplies.length} items found
-                    </div>
-                </div>
-
-                <ul className="optional">
-                    {optionalSupplies.map(supply => (
-                        <SupplyItem
-                            key={supply.supply_id}
-                            item={supply.name}
-                            desc={supply.desc}
-                            optional={supply.optional}
-                            toggleCompletion={handleOptionalCompletion}
-                        />
-                    ))}
-                </ul>
+                <ItemsFoundCounter list={requiredSupplies} title={CardinalToOrdinary(supplyList.grade)}/>
+                <ItemsFoundCounter list={optionalSupplies} title={"Optional supplies"}/>
             </div>
         ) : (
             !loading ? (
