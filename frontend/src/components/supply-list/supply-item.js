@@ -4,7 +4,7 @@ class SupplyItem extends React.Component {
     render() {
         return (
             <li className={this.props.optional ? "optional-item" : null}>
-                <label className="supply-item"><h3>{this.props.item}</h3>
+                <label className="supply-item"><h3>x{this.props.amount} - {this.props.item}</h3>
                     <input type="checkbox"
                            name="supply-item"
                            onChange={this.props.toggleCompletion}/>

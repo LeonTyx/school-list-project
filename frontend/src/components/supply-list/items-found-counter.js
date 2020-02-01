@@ -37,6 +37,7 @@ function ItemsFoundCounter(props) {
                         item={supply.name}
                         desc={supply.desc}
                         optional={supply.optional}
+                        amount={supply.amount}
                         toggleCompletion={handleCompletion}
                     />
                 ))}

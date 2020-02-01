@@ -19,6 +19,7 @@ class App extends React.Component {
             storageStatus: null
         };
     }
+    
 
     componentDidMount() {
         console.log("Component mounted");

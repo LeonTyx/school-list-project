@@ -26,7 +26,9 @@ func Routes() *chi.Mux {
 	router.With(
 		authorization.CanView,
 	).Get("/supply/{supplyID}", GetSupply)
-	//router.Delete("/{todoID}", DeleteSupply)
+	router.With(
+		authorization.CanDelete,
+	).Delete("/{todoID}", DeleteSupply)
 	//router.Post("/", CreateSupply)
 	//router.Post("/", EditSupply)
 
@@ -47,7 +49,9 @@ func GetSupply(w http.ResponseWriter, r *http.Request) {
 
 //func CreateSupply(w http.ResponseWriter, r *http.Request) {}
 
-//func DeleteSupply(w http.ResponseWriter, r *http.Request) {}
+func DeleteSupply(w http.ResponseWriter, r *http.Request) {
+
+}
 
 type Supplies struct {
 	DistrictID   string   `json:"district_id"`

@@ -95,11 +95,13 @@ type SupplyListItem struct {
 	Name     string `json:"name"`
 	Desc     string `json:"desc"`
 	Optional bool   `json:"optional"`
+	Amount int   `json:"amount"`
 }
 
 type SupplyList struct {
-	SupplyListItems []SupplyListItem `json:"supply_list"`
+	District int `json:"district_id"`
 	Grade           int8             `json:"grade"`
+	SupplyListItems []SupplyListItem `json:"supply_list"`
 }
 
 func IsNumeric(s string) bool {
@@ -114,7 +116,7 @@ func GetASupplyList(w http.ResponseWriter, r *http.Request) {
 	grade = -1
 
 	if IsNumeric(listID) && len(listID) < 5 {
-		rows, err := database.DBCon.Query("SELECT S.grade, P.supply_id, P.supply_name, P.supply_desc, B.optional FROM supply_item P JOIN supply_list_bridge B ON P.supply_id = B.supply_id JOIN supply_list S ON S.list_id = B.list_id WHERE B.list_id=$1 ORDER BY grade", listID)
+		rows, err := database.DBCon.Query("SELECT S.grade, P.supply_id, P.supply_name, P.supply_desc, B.optional, B.amount FROM supply_item P JOIN supply_list_bridge B ON P.supply_id = B.supply_id JOIN supply_list S ON S.list_id = B.list_id WHERE B.list_id=$1 ORDER BY grade", listID)
 
 		if err != nil {
 			log.Fatal(err)
@@ -124,7 +126,7 @@ func GetASupplyList(w http.ResponseWriter, r *http.Request) {
 		var supplyListItems []SupplyListItem
 		for rows.Next() {
 			var sli SupplyListItem
-			err := rows.Scan(&grade, &sli.SupplyID, &sli.Name, &sli.Desc, &sli.Optional)
+			err := rows.Scan(&grade, &sli.SupplyID, &sli.Name, &sli.Desc, &sli.Optional, &sli.Amount)
 
 			if err != nil {
 				log.Fatal(err)
