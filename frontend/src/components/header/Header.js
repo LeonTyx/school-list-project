@@ -121,10 +121,6 @@ function Header(props) {
 
     },[]);
 
-    useEffect(() => {
-        console.log(props.user.name)
-    },[props]);
-
     function logout() {
         console.log("Logging out");
         fetch('./oauth/v1/logout')

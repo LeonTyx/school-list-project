@@ -8,7 +8,6 @@ import GradeList from "./components/grade-list/GradeList";
 import SupplyList from "./components/supply-list/SupplyList";
 import NavBar from "./components/navbar/NavBar";
 
-//Todo: rewrite entire frontend session logic. This terrifies me.
 function App() {
     const [storageStatus, setStorageStatus] = useState(null);
     const [user, setUser] = useState({
@@ -32,7 +31,6 @@ function App() {
 
                 </Switch>
             </main>
-
             <NavBar/>
         </Router>
     );
