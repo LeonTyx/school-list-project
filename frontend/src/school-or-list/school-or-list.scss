@@ -1,0 +1,205 @@
+@import "../variables";
+
+.grade-supply-list{
+  max-width:55em;
+  box-sizing:border-box;
+  padding:1em;
+  margin:auto;
+
+  .school-info{
+    .school-header{
+      display:flex;
+      flex-flow:row wrap;
+      justify-content:space-between;
+      align-items:center;
+
+      h2{
+        color:#47535e;
+        padding-right:.5em;
+      }
+
+      h3{
+        color:#0685f7;
+        background:#ddefff;
+        padding:.25em 1em;
+        border-radius:1em;
+      }
+    }
+
+    .list-nav{
+      .list-picker{
+        display:flex;
+        flex-flow:row wrap;
+        list-style-type:none;
+        padding:0;
+
+        li{
+          cursor:pointer;
+          margin:.2em;
+          font-weight:500;
+          border-radius:.75em;
+          text-align:center;
+          flex:1 auto;
+
+          a,a:visited{
+            text-decoration: none;
+            color:#026b93;
+            background:#cfebef;
+            width:100%;
+            padding:.5em .5em;
+            box-sizing:border-box;
+            display:block;
+
+            &.active{
+              background: #fff;
+            }
+          }
+        }
+      }
+    }
+  }
+
+
+  .supply-list {
+    width:100%;
+    margin: 1em auto 0;
+    box-sizing: border-box;
+    background: #fff;
+    border-radius: 1em;
+    overflow: hidden;
+    box-shadow: 0 14px 35px -24px rgba(46, 46, 46, 0.25);
+    -webkit-box-shadow: 0 14px 35px -24px rgba(46, 46, 46, 0.25);
+    -moz-box-shadow: 0 14px 35px -24px rgba(46, 46, 46, 0.25);
+
+    .supply-list-header {
+      margin-bottom: 1em;
+      display: flex;
+      flex-flow: row wrap;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+      background: #f5f9fa;
+
+      .completed-items {
+        padding: .25em 1em;
+        margin: 0 .5em;
+        background: $light-blue-background;
+        border-radius: 1em;
+        color: $primary-text-color;
+        font-weight: 500;
+      }
+
+      .title {
+        margin: .75em 0;
+        padding: 0 .75em;
+        font-size: 1.25em;
+        font-weight: 600;
+
+        color: $secondary-text-color;
+      }
+
+      .title {
+        margin: .75em 0;
+        padding: 0 .75em;
+        font-weight: 600;
+
+        color: $secondary-text-color;
+      }
+    }
+
+
+    ul {
+      list-style-type: none;
+      text-align: left;
+      padding: 0 1em;
+
+      li {
+        padding: 0;
+        margin: 0 0 .5em;
+
+        /* The container */
+        .supply-item {
+          position: relative;
+          padding-left: 35px;
+          cursor: pointer;
+          -webkit-user-select: none;
+          -moz-user-select: none;
+          -ms-user-select: none;
+          user-select: none;
+          display: flex;
+          flex-flow: row wrap;
+          align-items: center;
+
+          /* Hide the browser's default checkbox */
+          input {
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 0;
+            width: 0;
+
+            /* Show the checkmark when checked */
+            &:checked ~ .checkmark:after {
+              display: block;
+            }
+          }
+
+          /* Create a custom checkbox */
+          .checkmark {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 25px;
+            width: 25px;
+            background-color: #eee;
+
+            /* Create the checkmark/indicator (hidden when not checked) */
+            &:after {
+              content: "";
+              position: absolute;
+              display: none;
+              left: 9px;
+              top: 5px;
+              width: 5px;
+              height: 10px;
+              border: solid white;
+              border-width: 0 3px 3px 0;
+              -webkit-transform: rotate(45deg);
+              -ms-transform: rotate(45deg);
+              transform: rotate(45deg);
+            }
+          }
+
+          /* On mouse-over, add a grey background color */
+          &:hover input ~ .checkmark {
+            background-color: #ccc;
+          }
+
+          /* When the checkbox is checked, add a blue background */
+          input:checked ~ .checkmark {
+            background-color: #2196F3;
+          }
+
+          h3 {
+            margin: 0 0 0 .2em;
+            display: inline-block;
+            font-size: 1.1em;
+            color: $secondary-text-color;
+            width: calc(100% - 3em);
+          }
+
+          p {
+            margin: 0;
+            color: $secondary-text-color;
+          }
+        }
+      }
+    }
+
+    //Animate each card with a slight delay for each proceeding card
+    & {
+      -webkit-animation: slide-up 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+      animation: slide-up 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    }
+  }
+}

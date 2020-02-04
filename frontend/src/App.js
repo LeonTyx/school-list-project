@@ -7,6 +7,8 @@ import {HashRouter as Router, Route, Switch} from 'react-router-dom'
 import GradeList from "./components/grade-list/GradeList";
 import SupplyList from "./components/supply-list/SupplyList";
 import NavBar from "./components/navbar/NavBar";
+import SchoolOrList from "./school-or-list/school-or-list";
+import NotFound from "./components/not-found/not-found";
 
 function App() {
     const [storageStatus, setStorageStatus] = useState(null);
@@ -26,9 +28,8 @@ function App() {
                 <Switch>
                     <Route exact path="/" component={Schools}/>
 
-                    <Route path="/lists/:id" component={GradeList}/>
-                    <Route path="/list/:id" component={SupplyList}/>
-
+                    <Route path="/school/:schoolID/:grade?" component={SchoolOrList}/>
+                    <Route component={NotFound} />
                 </Switch>
             </main>
             <NavBar/>

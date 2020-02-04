@@ -1,65 +1,47 @@
 import React, {useEffect, useState} from 'react';
-import './grade-list.scss'
-import Loader from "../loader/Loader";
+import {NavLink} from 'react-router-dom'
+import CardinalToOrdinary from "../cardinal-to-ordinary/CardinalToOrdinary";
 
 function GradeList(props) {
-    const [gradeList, setGradeList] = useState([]);
-    const [loading, setLoading] = useState(true);
-
+    const [grades, setGrades] = useState(null);
+    const [schoolName, setSchoolName] = useState(null);
+    const [educationStage, setEducationStage] = useState(null);
 
     useEffect(() => {
-        setLoading(true);
-
-        async function fetchUrl() {
-            const schoolID = props.match.params.id;
-            //Todo: Check that listID is an integer before parsing it
-            const response = await fetch("./api/v1/supply_lists/school/" + schoolID);
-            const json = await response.json();
-
-            setGradeList(json);
-
-            setLoading(false)
+        if(props.school!== null){
+            setGrades(props.school.supply_lists);
+            setSchoolName(props.school.school_name);
+            setEducationStage(props.school.education_stage);
         }
+    }, [props.school]);
 
-        fetchUrl();
-
-    }, [props.match.params.id]);
-
-    return !loading ? (
-        gradeList !== null ? (
-            <div className="school">
-                <div className="grade-list-header">
-                    <h2>
-                        {gradeList.school_name !== null
-                            ? gradeList.school_name
-                            : "This school has no name"}
-                    </h2>
-                    <div className="education-stage">{gradeList.education_stage}</div>
+    return(
+        props.school !== null ?(
+            <div className="school-info">
+                <div className="school-header">
+                    <h2>{schoolName}</h2>
+                    <h3>{educationStage}</h3>
                 </div>
-                <ul className="grade-list">
-                    {gradeList.supply_lists !== null ? (
-                        gradeList.supply_lists.map(list => (
-                            <li key={list.list_id}>
-                                <a href={".#/list/" + list.list_id}>
-                                    List for grade {list.grade}
-                                </a>
 
-                                <div className="school-year">
-                                    {list.starting_year} to {list.ending_year}
-                                </div>
-                            </li>
-                        ))
-                    ) : (
-                        <li>It doesn't look like this school has any supply lists!</li>
-                    )}
-                </ul>
+                <p>Select grade</p>
+                <div className="list-nav">
+                    <ul className="list-picker">
+                        {grades !== null && (
+                            grades.map(grade => (
+                                    <li>
+                                        <NavLink key={grade.grade} activeClassName="active" to={"/school/"+ props.schoolID +"/" + grade.grade}>
+                                            {CardinalToOrdinary(grade.grade)}
+                                        </NavLink>
+                                    </li>
+                                )
+                            ))}
+                    </ul>
+                </div>
             </div>
-        ) : (
-            <div>Doesn't look like this school exists</div>
+        ):(
+            <div> You've stumbled upon a school without any supply lists! </div>
         )
-    ) : (
-        <Loader/>
-    );
+    )
 }
 
 export default GradeList;

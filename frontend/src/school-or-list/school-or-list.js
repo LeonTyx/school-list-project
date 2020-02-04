@@ -1,0 +1,72 @@
+import React, {useEffect, useState} from 'react';
+import Loader from "../components/loader/Loader";
+import SupplyList from "../components/supply-list/SupplyList";
+import GradeList from "../components/grade-list/GradeList";
+
+import './school-or-list.scss'
+
+function SchoolOrList(props) {
+    const [list, setList] = useState(null);
+    const [school, setSchool] = useState(null);
+
+    const [listLoading, setListLoading] = useState(true);
+    const [gradeLoading, setGradeLoading] = useState(true);
+
+    useEffect(() => {
+        setListLoading(true);
+        setGradeLoading(true);
+        fetchSchool();
+
+        if(props.match.params.grade !== undefined){
+            fetchList();
+        }
+
+        async function fetchList() {
+            const grade = props.match.params.grade;
+            const schoolID = props.match.params.schoolID;
+
+            //Todo: Check that listID is an integer before parsing it
+            const response = await fetch("/api/v1/supply_lists/school/"+schoolID+"/grade/" + grade);
+            const json = await response.json();
+            if (!Array.isArray(json.supply_list)) {
+                setList(null);
+            } else {
+                setList(json);
+            }
+
+            setListLoading(false);
+        }
+
+        async function fetchSchool() {
+            const schoolID = props.match.params.schoolID;
+
+            //Todo: Check that listID is an integer before parsing it
+            const response = await fetch("/api/v1/supply_lists/school/" + schoolID);
+            const json = await response.json();
+            if (!Array.isArray(json.supply_lists)) {
+                setSchool(null);
+            } else {
+                setSchool(json);
+            }
+
+            setGradeLoading(false);
+        }
+    }, [props.match.params.schoolID,props.match.params.grade]);
+    
+
+    return (
+        !gradeLoading ? (
+            <div className="grade-supply-list">
+                <GradeList school={school} schoolID={props.match.params.schoolID}/>
+                {!listLoading &&
+                    <SupplyList list={list} grade={props.match.params.grade}/>
+                }
+            </div>
+        ):(
+            <Loader/>
+        )
+    );
+
+}
+
+export default SchoolOrList;

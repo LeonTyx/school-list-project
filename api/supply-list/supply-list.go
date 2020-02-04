@@ -13,10 +13,11 @@ func Routes() *chi.Mux {
 	router := chi.NewRouter()
 
 	router.Get("/school/{schoolID}", GetSupplyLists)
-	router.Get("/{listID}", GetASupplyList)
+	router.Get("/school/{schoolID}/grade/{grade}", GetSupplyList)
 
 	return router
 }
+
 
 //A GradeList is a list of all supply lists
 //Belonging to a school
@@ -99,8 +100,6 @@ type SupplyListItem struct {
 }
 
 type SupplyList struct {
-	District int `json:"district_id"`
-	Grade           int8             `json:"grade"`
 	SupplyListItems []SupplyListItem `json:"supply_list"`
 }
 
@@ -109,14 +108,18 @@ func IsNumeric(s string) bool {
 	return err == nil
 }
 
-func GetASupplyList(w http.ResponseWriter, r *http.Request) {
-	listID := chi.URLParam(r, "listID")
+func GetSupplyList(w http.ResponseWriter, r *http.Request) {
+	grade := chi.URLParam(r, "grade")
+	schoolID := chi.URLParam(r, "schoolID")
 
-	var grade int8
-	grade = -1
 
-	if IsNumeric(listID) && len(listID) < 5 {
-		rows, err := database.DBCon.Query("SELECT S.grade, P.supply_id, P.supply_name, P.supply_desc, B.optional, B.amount FROM supply_item P JOIN supply_list_bridge B ON P.supply_id = B.supply_id JOIN supply_list S ON S.list_id = B.list_id WHERE B.list_id=$1 ORDER BY grade", listID)
+	if IsNumeric(grade) && len(grade) < 2 && IsNumeric(schoolID) && len(schoolID) < 2{
+		rows, err := database.DBCon.Query(`SELECT P.supply_id, P.supply_name, P.supply_desc, B.optional, B.amount
+													FROM supply_item P
+													JOIN supply_list_bridge B ON P.supply_id = B.supply_id
+													JOIN supply_list S ON S.list_id = B.list_id
+													WHERE S.grade=$1 AND
+													S.school_id=$2`, grade, schoolID)
 
 		if err != nil {
 			log.Fatal(err)
@@ -126,7 +129,7 @@ func GetASupplyList(w http.ResponseWriter, r *http.Request) {
 		var supplyListItems []SupplyListItem
 		for rows.Next() {
 			var sli SupplyListItem
-			err := rows.Scan(&grade, &sli.SupplyID, &sli.Name, &sli.Desc, &sli.Optional, &sli.Amount)
+			err := rows.Scan(&sli.SupplyID, &sli.Name, &sli.Desc, &sli.Optional, &sli.Amount)
 
 			if err != nil {
 				log.Fatal(err)
@@ -136,14 +139,12 @@ func GetASupplyList(w http.ResponseWriter, r *http.Request) {
 		}
 		supplyList := SupplyList{
 			SupplyListItems: supplyListItems,
-			Grade:           grade,
 		}
 
 		render.JSON(w, r, supplyList)
 	} else {
 		RespondWithError(w, r, 414, "List IDs must not exceed 5 characters in length")
 	}
-
 }
 
 type Error struct {

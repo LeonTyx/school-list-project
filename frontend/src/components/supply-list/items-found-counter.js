@@ -30,7 +30,7 @@ function ItemsFoundCounter(props) {
                 </div>
             </div>
 
-            <ul className="optional">
+            <ul>
                 {supplies.map(supply => (
                     <SupplyItem
                         key={supply.supply_id}

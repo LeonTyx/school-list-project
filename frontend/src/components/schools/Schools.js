@@ -29,7 +29,7 @@ function Schools() {
                     <ul>
                         {schools.schools.map(school => (
                             <li key={school.school_id}>
-                                <a href={".#/lists/" + school.school_id}>List for {school.name}</a>
+                                <a href={".#/school/" + school.school_id}>List for {school.name}</a>
                             </li>
                         ))}
                     </ul>
