@@ -13,9 +13,27 @@ function SchoolOrList(props) {
     const [gradeLoading, setGradeLoading] = useState(true);
 
     useEffect(() => {
-        setListLoading(true);
         setGradeLoading(true);
         fetchSchool();
+
+        async function fetchSchool() {
+            const schoolID = props.match.params.schoolID;
+
+            //Todo: Check that listID is an integer before parsing it
+            const response = await fetch("/api/v1/supply_lists/school/" + schoolID);
+            const json = await response.json();
+            if (!Array.isArray(json.supply_lists)) {
+                setSchool(null);
+            } else {
+                setSchool(json);
+            }
+
+            setGradeLoading(false);
+        }
+    }, [props.match.params.schoolID]);
+
+    useEffect(() => {
+        setListLoading(true);
 
         if(props.match.params.grade !== undefined){
             fetchList();
@@ -36,25 +54,10 @@ function SchoolOrList(props) {
 
             setListLoading(false);
         }
+    }, [props.match.params.grade]);
 
-        async function fetchSchool() {
-            const schoolID = props.match.params.schoolID;
 
-            //Todo: Check that listID is an integer before parsing it
-            const response = await fetch("/api/v1/supply_lists/school/" + schoolID);
-            const json = await response.json();
-            if (!Array.isArray(json.supply_lists)) {
-                setSchool(null);
-            } else {
-                setSchool(json);
-            }
-
-            setGradeLoading(false);
-        }
-    }, [props.match.params.schoolID,props.match.params.grade]);
-    
-
-    return (
+        return (
         !gradeLoading ? (
             <div className="grade-supply-list">
                 <GradeList school={school} schoolID={props.match.params.schoolID}/>

@@ -37,7 +37,6 @@ function SupplyList(props) {
         ) : (
             <div>Looks like you found an empty supply list</div>
         )
-//todo Rewrite to have loading, empty list, and nonexistent list
     )
 }
 

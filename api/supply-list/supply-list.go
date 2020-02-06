@@ -63,8 +63,7 @@ func GetSupplyLists(w http.ResponseWriter, r *http.Request) {
 		}
 		render.JSON(w, r, gradeList)
 	} else {
-		render.Status(r, 400)
-		render.JSON(w, r, nil)
+		RespondWithError(w, r, 414, "School ID's must be numerical and smaller than 4 digits")
 	}
 }
 func GetSchoolName(schoolID string) []string {
@@ -143,7 +142,7 @@ func GetSupplyList(w http.ResponseWriter, r *http.Request) {
 
 		render.JSON(w, r, supplyList)
 	} else {
-		RespondWithError(w, r, 414, "List IDs must not exceed 5 characters in length")
+		RespondWithError(w, r, 414, "Grades must be numerical and smaller than 4 digits")
 	}
 }
 
