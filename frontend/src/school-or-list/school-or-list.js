@@ -19,7 +19,6 @@ function SchoolOrList(props) {
         async function fetchSchool() {
             const schoolID = props.match.params.schoolID;
 
-            //Todo: Check that listID is an integer before parsing it
             const response = await fetch("/api/v1/supply_lists/school/" + schoolID);
             const json = await response.json();
             if (!Array.isArray(json.supply_lists)) {
@@ -43,7 +42,6 @@ function SchoolOrList(props) {
             const grade = props.match.params.grade;
             const schoolID = props.match.params.schoolID;
 
-            //Todo: Check that listID is an integer before parsing it
             const response = await fetch("/api/v1/supply_lists/school/"+schoolID+"/grade/" + grade);
             const json = await response.json();
             if (!Array.isArray(json.supply_list)) {
@@ -61,8 +59,9 @@ function SchoolOrList(props) {
         !gradeLoading ? (
             <div className="grade-supply-list">
                 <GradeList school={school} schoolID={props.match.params.schoolID}/>
-                {!listLoading &&
-                    <SupplyList list={list} grade={props.match.params.grade}/>
+                {!listLoading ?
+                    (<SupplyList list={list} grade={props.match.params.grade}/>):
+                    (<Loader/>)
                 }
             </div>
         ):(
