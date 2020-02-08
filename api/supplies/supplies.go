@@ -2,6 +2,7 @@ package supplies
 
 import (
 	"context"
+	"encoding/json"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"log"
@@ -26,10 +27,15 @@ func Routes() *chi.Mux {
 	router.With(
 		authorization.CanView,
 	).Get("/supply/{supplyID}", GetSupply)
+
 	router.With(
 		authorization.CanDelete,
 	).Delete("/{todoID}", DeleteSupply)
-	//router.Post("/", CreateSupply)
+
+	router.With(
+		authorization.CanCreate,
+		isUnique,
+	).Post("/create", CreateSupply)
 	//router.Post("/", EditSupply)
 
 	return router
@@ -51,6 +57,56 @@ func GetSupply(w http.ResponseWriter, r *http.Request) {
 
 func DeleteSupply(w http.ResponseWriter, r *http.Request) {
 
+}
+
+func isUnique(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		var supply Supply
+		_ = json.NewDecoder(r.Body).Decode(&supply)
+
+		rows, err := database.DBCon.Query(`SELECT COUNT(*) as count FROM supply_item WHERE supply_name = $1`, supply.Name)
+		if err != nil {
+			RespondWithError(w, r, 503, "There was an error contacting the database.")
+			log.Fatal(err)
+		}
+		defer rows.Close()
+		var count int
+
+		for rows.Next() {
+			err := rows.Scan(&count)
+			if err != nil {
+				RespondWithError(w, r, 503, "There was an error contacting the database.")
+				panic(err)
+			}
+		}
+
+		if count > 0 {
+			RespondWithError(w, r, 400, "Supply item names must be unique")
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
+//Create a supply using the Supply struct and post body information
+//TODO Add ability to add item to specific districts
+func CreateSupply(w http.ResponseWriter, r *http.Request) {
+	var supply Supply
+
+	_ = json.NewDecoder(r.Body).Decode(&supply)
+
+	rows, err := database.DBCon.Query(`INSERT INTO supply_item (supply_name, supply_desc, district_id) 
+											  VALUES($1, $2, 5305400)`, supply.Name, supply.Desc)
+	if err != nil {
+		RespondWithError(w, r, 503, "There was an error contacting the database.")
+
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	render.Status(r, 201)
+	render.JSON(w, r, `"message":"successfully created"`)
 }
 
 type Supplies struct {
@@ -104,4 +160,17 @@ func GetSupplies(w http.ResponseWriter, r *http.Request) {
 func IsNumeric(s string) bool {
 	_, err := strconv.ParseFloat(s, 64)
 	return err == nil
+}
+
+type Error struct {
+	StatusCode   int    `json:"status_code"`
+	ErrorMessage string `json:"error_msg"`
+}
+
+func RespondWithError(w http.ResponseWriter, r *http.Request, status_code int, error_msg string) {
+	render.Status(r, status_code)
+	render.JSON(w, r, Error{
+		StatusCode:   status_code,
+		ErrorMessage: error_msg,
+	})
 }

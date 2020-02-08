@@ -9,7 +9,7 @@ function SchoolOrList(props) {
     const [list, setList] = useState(null);
     const [school, setSchool] = useState(null);
 
-    const [listLoading, setListLoading] = useState(true);
+    const [listLoading, setListLoading] = useState(false);
     const [gradeLoading, setGradeLoading] = useState(true);
 
     useEffect(() => {
@@ -32,9 +32,8 @@ function SchoolOrList(props) {
     }, [props.match.params.schoolID]);
 
     useEffect(() => {
-        setListLoading(true);
-
         if(props.match.params.grade !== undefined){
+            setListLoading(true);
             fetchList();
         }
 
@@ -59,10 +58,13 @@ function SchoolOrList(props) {
         !gradeLoading ? (
             <div className="grade-supply-list">
                 <GradeList school={school} schoolID={props.match.params.schoolID}/>
-                {!listLoading ?
+                {props.match.params.grade === undefined && school.school !== null?(
+                    <div>Select a grade above </div>
+                ):(
+                    !listLoading ?
                     (<SupplyList list={list} grade={props.match.params.grade}/>):
                     (<Loader/>)
-                }
+                )}
             </div>
         ):(
             <Loader/>

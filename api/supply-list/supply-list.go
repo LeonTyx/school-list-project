@@ -55,7 +55,7 @@ func GetSupplyLists(w http.ResponseWriter, r *http.Request) {
 
 			supplyLists = append(supplyLists, sl)
 		}
-		schoolDetails := GetSchoolName(schoolID)
+		schoolDetails := GetSchool(schoolID)
 		gradeList := GradeList{
 			SchoolName:     schoolDetails[0],
 			EducationStage: schoolDetails[1],
@@ -66,7 +66,8 @@ func GetSupplyLists(w http.ResponseWriter, r *http.Request) {
 		RespondWithError(w, r, 414, "School ID's must be numerical and smaller than 4 digits")
 	}
 }
-func GetSchoolName(schoolID string) []string {
+
+func GetSchool(schoolID string) []string {
 	rows, err := database.DBCon.Query("SELECT name, education_stage FROM school S WHERE S.school_id=$1", schoolID)
 
 	if err != nil {

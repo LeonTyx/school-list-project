@@ -81,7 +81,7 @@ func CanView(next http.Handler) http.Handler {
 	})
 }
 
-func CanAdd(next http.Handler) http.Handler {
+func CanCreate(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		resourcePolicy := r.Context().Value("resourcePolicy").(Resource)
 
