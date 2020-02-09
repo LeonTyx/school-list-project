@@ -36,4 +36,9 @@ nav {
       background: $light-blue-background;
     }
   }
+
+  & {
+    -webkit-animation: slide-up 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+    animation: slide-up 0.4s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+  }
 }

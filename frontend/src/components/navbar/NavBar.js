@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {NavLink} from 'react-router-dom'
 import './navbar.scss'
 
-function NavBar() {
+function NavBar(props) {
     const [schools, setSchools] = useState([null]);
     const [loading, setLoading] = useState(true);
 
@@ -27,6 +27,11 @@ function NavBar() {
                             {school.name}
                         </NavLink>
                     ))}
+                    {props.isLoggedIn &&(
+                        <NavLink key="dashboard" activeClassName="active" to="/dashboard">
+                            Dashboard
+                        </NavLink>
+                    )}
                 </nav>
             )
         )

@@ -21,11 +21,7 @@ function SchoolOrList(props) {
 
             const response = await fetch("/api/v1/supply_lists/school/" + schoolID);
             const json = await response.json();
-            if (!Array.isArray(json.supply_lists)) {
-                setSchool(null);
-            } else {
-                setSchool(json);
-            }
+            setSchool(json);
 
             setGradeLoading(false);
         }

@@ -26,7 +26,7 @@ function GradeList(props) {
                 <p>Select grade</p>
                 <div className="list-nav">
                     <ul className="list-picker">
-                        {grades !== null && (
+                        {grades !== null ? (
                             grades.map(grade => (
                                     <li>
                                         <NavLink key={grade.grade} activeClassName="active" to={"/school/"+ props.schoolID +"/" + grade.grade}>
@@ -34,7 +34,10 @@ function GradeList(props) {
                                         </NavLink>
                                     </li>
                                 )
-                            ))}
+
+                            )):(
+                            <div> You've stumbled upon a school without any supply lists! </div>
+                        )}
                     </ul>
                 </div>
             </div>
