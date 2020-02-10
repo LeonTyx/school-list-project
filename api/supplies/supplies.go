@@ -35,7 +35,7 @@ func Routes() *chi.Mux {
 	router.With(
 		authorization.CanCreate,
 		isUnique,
-	).Post("/create", CreateSupply)
+	).Post("/supply", CreateSupply)
 	//router.Post("/", EditSupply)
 
 	return router

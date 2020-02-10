@@ -9,13 +9,14 @@ import SchoolOrList from "./school-or-list/school-or-list";
 import NotFound from "./components/not-found/not-found";
 import {ProtectedRoute} from "./components/protected-routes/ProtectedRoute";
 import Dashboard from "./components/dashboard/dashboard";
+import SupplyEditor from "./components/dashboard/supply-editor/supply-editor";
 
 function App() {
     const [storageStatus, setStorageStatus] = useState(null);
     const [user, setUser] = useState({
         name: null,
         email: null,
-        isLoggedIn: false
+        isLoggedIn: false,
     });
 
     return (
@@ -27,6 +28,8 @@ function App() {
             <main>
                 <Switch>
                     <ProtectedRoute exact path="/dashboard" component={Dashboard} user={user} />
+                    <ProtectedRoute exact path="/dashboard/supplies" component={SupplyEditor} user={user} />
+
                     <Route exact path="/" component={Schools}/>
 
                     <Route path="/school/:schoolID/:grade?" component={SchoolOrList}/>
