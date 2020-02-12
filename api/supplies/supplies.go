@@ -125,7 +125,7 @@ func GetSupplies(w http.ResponseWriter, r *http.Request) {
 	districtID := chi.URLParam(r, "districtID")
 
 	if IsNumeric(districtID) && len(districtID) == 7 {
-		rows, err := database.DBCon.Query("SELECT supply_id, supply_name, supply_desc, name FROM supply_item LEFT OUTER JOIN district d on supply_item.district_id = d.nces_id WHERE d.nces_id=$1", districtID)
+		rows, err := database.DBCon.Query("SELECT supply_id, supply_name, supply_desc, name FROM supply_item LEFT OUTER JOIN district d on supply_item.district_id = d.nces_id WHERE d.nces_id=$1 ORDER BY supply_id", districtID)
 
 		if err != nil {
 			log.Fatal(err)

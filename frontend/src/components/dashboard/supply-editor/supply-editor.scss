@@ -1,0 +1,89 @@
+@import "../../../variables";
+
+.supplies table {
+  max-width: 70em;
+  width: calc(100% - 1em);
+  margin: 1em auto;
+  border-collapse: collapse;
+  table-layout: fixed;
+  box-sizing: border-box;
+  box-shadow: $basic-box-shadow;
+
+  caption {
+    font-size: 1.5em;
+    margin: .5em 0 .75em;
+  }
+
+  tr:hover {
+    background:#efefef;
+  }
+
+  th,td {
+    padding: .625em;
+    text-align: center;
+    min-height: 3em;
+  }
+
+  th {
+    font-size: .85em;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    background: #f5f9fa;
+
+    &:last-of-type{
+      width:70%;
+    }
+  }
+  tr{
+    background: #fff;
+  }
+}
+
+@media screen and (max-width: 50em) {
+  .supplies table {
+    border: 0;
+  }
+  .supplies table caption {
+    font-size: 1.3em;
+  }
+  .supplies table thead {
+    border: none;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+  }
+  .supplies table tbody tr td:first-child {
+    background: #f5f9fa;
+    color: #000;
+  }
+  .supplies table td {
+    display: block;
+    font-size: .8em;
+    text-align: right;
+  }
+  .supplies table tr {
+    color: #444;
+    display: block;
+    border-radius: .25em;
+    margin-bottom: .625em;
+    border: none;
+    box-shadow: $basic-box-shadow;
+  }
+  .supplies table td::before {
+    /*
+    * aria-label has no advantage, it won't be read inside a table
+    content: attr(aria-label);
+    */
+    content: attr(data-label);
+    float: left;
+    font-weight: bold;
+    text-transform: uppercase;
+  }
+  .supplies table td:last-child {
+    border-bottom: 0;
+  }
+}
