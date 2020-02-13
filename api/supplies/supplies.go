@@ -1,10 +1,13 @@
 package supplies
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"school-list-project/auth/authorization"
@@ -61,9 +64,11 @@ func DeleteSupply(w http.ResponseWriter, r *http.Request) {
 
 func isUnique(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		buf, _ := ioutil.ReadAll(r.Body)
+		r1 := ioutil.NopCloser(bytes.NewBuffer(buf))
+		r2 := ioutil.NopCloser(bytes.NewBuffer(buf))
 		var supply Supply
-		_ = json.NewDecoder(r.Body).Decode(&supply)
-
+		_ = json.NewDecoder(r1).Decode(&supply)
 		rows, err := database.DBCon.Query(`SELECT COUNT(*) as count FROM supply_item WHERE supply_name = $1`, supply.Name)
 		if err != nil {
 			RespondWithError(w, r, 503, "There was an error contacting the database.")
@@ -85,6 +90,7 @@ func isUnique(next http.Handler) http.Handler {
 			return
 		}
 
+		r.Body = r2 // OK since rdr2 implements the io.ReadCloser interface
 		next.ServeHTTP(w, r)
 	})
 }
@@ -93,9 +99,9 @@ func isUnique(next http.Handler) http.Handler {
 //TODO Add ability to add item to specific districts
 func CreateSupply(w http.ResponseWriter, r *http.Request) {
 	var supply Supply
-
 	_ = json.NewDecoder(r.Body).Decode(&supply)
 
+	fmt.Println(supply)
 	rows, err := database.DBCon.Query(`INSERT INTO supply_item (supply_name, supply_desc, district_id) 
 											  VALUES($1, $2, 5305400)`, supply.Name, supply.Desc)
 	if err != nil {
@@ -105,8 +111,23 @@ func CreateSupply(w http.ResponseWriter, r *http.Request) {
 	}
 	defer rows.Close()
 
+	//Check to see what the ID for the newly created supply is
+	rows, err = database.DBCon.Query(`SELECT supply_id FROM supply_item 
+											  WHERE supply_name=$1`, supply.Name)
+	if err != nil {
+		RespondWithError(w, r, 503, "There was an error contacting the database.")
+
+		log.Fatal(err)
+	}
+	var supplyID string
+	for rows.Next() {
+		err := rows.Scan(&supplyID)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
 	render.Status(r, 201)
-	render.JSON(w, r, `"message":"successfully created"`)
+	render.JSON(w, r, supplyID)
 }
 
 type Supplies struct {

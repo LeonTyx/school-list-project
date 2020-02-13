@@ -1,24 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React from 'react';
 import Loader from "../../loader/Loader";
 
 function Supplies(props) {
-    const [districtSupplies, setDS] = useState(null);
-    const [dsLoading, setDSLoading] = useState(null);
-
-    useEffect(() => {
-        setDSLoading(true);
-        fetchDS();
-
-        async function fetchDS() {
-            const response = await fetch("/api/v1/supplies/" + props.districtID);
-            const json = await response.json();
-            setDS(json);
-
-            setDSLoading(false);
-        }
-    }, [props.districtID]);
-
-    return ( !dsLoading && districtSupplies !== null? (
+    return ( !props.dsLoading && props.districtSupplies !== null? (
         <div className="supplies">
             <table>
                 <caption>Supplies for {props.districtID}</caption>
@@ -31,8 +15,8 @@ function Supplies(props) {
                 </thead>
 
                 <tbody>
-                {districtSupplies.supplies !== null && (
-                    districtSupplies.supplies.map(supply => (
+                {props.districtSupplies.supplies !== null && (
+                    props.districtSupplies.supplies.map(supply => (
                         <tr>
                             <td data-label="ID">{supply.supply_id}</td>
                             <td data-label="Name">{supply.supply_name}</td>
