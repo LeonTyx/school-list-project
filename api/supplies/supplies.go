@@ -33,7 +33,7 @@ func Routes() *chi.Mux {
 
 	router.With(
 		authorization.CanDelete,
-	).Delete("/{todoID}", DeleteSupply)
+	).Delete("/supply/{supplyID}", DeleteSupply)
 
 	router.With(
 		authorization.CanCreate,
@@ -59,7 +59,16 @@ func GetSupply(w http.ResponseWriter, r *http.Request) {
 //func CreateSupply(w http.ResponseWriter, r *http.Request) {}
 
 func DeleteSupply(w http.ResponseWriter, r *http.Request) {
+	rows, err := database.DBCon.Query(`DELETE FROM supply_item where supply_id=$1`, chi.URLParam(r, "supplyID"))
+	if err != nil {
+		RespondWithError(w, r, 503, "There was an error contacting the database.")
 
+		log.Fatal(err)
+	}
+	defer rows.Close()
+
+	render.Status(r, 201)
+	render.JSON(w, r, "Deletion succeeded")
 }
 
 func isUnique(next http.Handler) http.Handler {
