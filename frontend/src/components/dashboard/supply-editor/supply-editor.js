@@ -7,6 +7,7 @@ function SupplyEditor() {
     const [supplyDesc, setSupplyDesc] = useState("");
     const [districtSupplies, setDS] = useState(null);
     const [dsLoading, setDSLoading] = useState(null);
+    const [editingMode, setEditingMode] = useState(false);
 
     useEffect(() => {
         setDSLoading(true);
@@ -84,7 +85,12 @@ function SupplyEditor() {
                 <input type="submit" value="Submit" />
             </form>
             <Supplies districtSupplies={districtSupplies}
-                      dsLoading={dsLoading}/>
+                      dsLoading={dsLoading}
+                      editingMode={editingMode}
+            />
+            <button onClick={e => setEditingMode(!editingMode)}>
+                Toggle editing mode
+            </button>
         </React.Fragment>
     );
 

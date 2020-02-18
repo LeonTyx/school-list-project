@@ -39,9 +39,18 @@ func Routes() *chi.Mux {
 		authorization.CanCreate,
 		isUnique,
 	).Post("/supply", CreateSupply)
-	//router.Post("/", EditSupply)
 
+	router.With(
+		authorization.CanEdit,
+	).Put("/supply", EditSupply)
 	return router
+}
+
+func EditSupply(w http.ResponseWriter, r *http.Request) {
+	var supply Supply
+	_ = json.NewDecoder(r.Body).Decode(&supply)
+
+	render.JSON(w, r, supply)
 }
 
 func suppliesCtx(next http.Handler) http.Handler {
@@ -55,8 +64,6 @@ func suppliesCtx(next http.Handler) http.Handler {
 func GetSupply(w http.ResponseWriter, r *http.Request) {
 
 }
-
-//func CreateSupply(w http.ResponseWriter, r *http.Request) {}
 
 func DeleteSupply(w http.ResponseWriter, r *http.Request) {
 	rows, err := database.DBCon.Query(`DELETE FROM supply_item where supply_id=$1`, chi.URLParam(r, "supplyID"))

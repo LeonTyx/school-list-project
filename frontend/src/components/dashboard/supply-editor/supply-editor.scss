@@ -19,9 +19,8 @@
   }
 
   th,td {
-    padding: .625em;
     text-align: center;
-    min-height: 3em;
+    padding: .5em 0;
   }
 
   th {
@@ -34,8 +33,31 @@
       width:70%;
     }
   }
+  input{
+    padding:.5em;
+    box-sizing: border-box;
+    width: 100%;
+  }
+
   tr{
     background: #fff;
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+
+    .ID{
+      flex:1;
+    }
+    .name{
+      flex:2;
+    }
+    .desc{
+      flex: 8;
+    }
+
+    &:nth-child(even){
+      background: $header-background;
+    }
   }
 }
 

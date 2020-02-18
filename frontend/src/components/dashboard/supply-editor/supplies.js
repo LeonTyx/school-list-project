@@ -1,5 +1,6 @@
 import React from 'react';
 import Loader from "../../loader/Loader";
+import Supply from "./supply";
 
 function Supplies(props) {
     return ( !props.dsLoading && props.districtSupplies !== null? (
@@ -8,22 +9,18 @@ function Supplies(props) {
                 <caption>Supplies for {props.districtID}</caption>
                 <thead>
                     <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Name</th>
-                        <th scope="col">Description</th>
+                        <th scope="col" className="ID">ID</th>
+                        <th scope="col" className="name">Name</th>
+                        <th scope="col" className="desc">Description</th>
                     </tr>
                 </thead>
 
                 <tbody>
                 {props.districtSupplies.supplies !== null && (
                     props.districtSupplies.supplies.map(supply => (
-                        <tr>
-                            <td data-label="ID">{supply.supply_id}</td>
-                            <td data-label="Name">{supply.supply_name}</td>
-                            <td data-label="Desc">{supply.supply_desc}</td>
-                        </tr>
-                        ))
-                    )
+                        <Supply supply={supply} editingMode={props.editingMode}/>
+                    ))
+                )
                 }
                 </tbody>
             </table>
