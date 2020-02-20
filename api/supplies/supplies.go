@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
-	"fmt"
 	"github.com/go-chi/chi"
 	"github.com/go-chi/render"
 	"io/ioutil"
@@ -49,6 +48,15 @@ func Routes() *chi.Mux {
 func EditSupply(w http.ResponseWriter, r *http.Request) {
 	var supply Supply
 	_ = json.NewDecoder(r.Body).Decode(&supply)
+
+	rows, err := database.DBCon.Query(`UPDATE supply_item SET supply_name=$1, supply_desc=$2
+											  WHERE supply_id=$3`, supply.Name, supply.Desc, supply.ID)
+	if err != nil {
+		RespondWithError(w, r, 503, "There was an error contacting the database.")
+
+		log.Fatal(err)
+	}
+	defer rows.Close()
 
 	render.JSON(w, r, supply)
 }
@@ -117,7 +125,6 @@ func CreateSupply(w http.ResponseWriter, r *http.Request) {
 	var supply Supply
 	_ = json.NewDecoder(r.Body).Decode(&supply)
 
-	fmt.Println(supply)
 	rows, err := database.DBCon.Query(`INSERT INTO supply_item (supply_name, supply_desc, district_id) 
 											  VALUES($1, $2, 5305400)`, supply.Name, supply.Desc)
 	if err != nil {
