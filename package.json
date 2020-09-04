@@ -10,7 +10,7 @@
     "eject": "cd frontend && npm install --only=dev && npm install && npm run eject"
   },
   "dependencies": {
-    "node-sass": "^4.13.0",
+    "node-sass": "^4.13.1",
     "react-router-dom": "^5.1.2"
   }
 }
